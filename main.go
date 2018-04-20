@@ -12,9 +12,8 @@ import (
 	"io/ioutil"
 	"github.com/bitrise-io/go-utils/pathutil"
 	"strings"
+	"path/filepath"
 )
-
-const flutterSdkDestinationDir = "/opt/"
 
 func main() {
 	configs := createConfigsModelFromEnvs()
@@ -59,6 +58,11 @@ func getArchiveExtension() string {
 }
 
 func extractSdk(flutterVersion string) error {
+	flutterSdkDestinationDir, err := getDestinationDir()
+	if err != nil {
+		return err
+	}
+
 	log.Infof("Extracting Flutter SDK to %s", flutterSdkDestinationDir)
 
 	versionComponents := strings.Split(flutterVersion, "-")
@@ -95,7 +99,15 @@ func extractSdk(flutterVersion string) error {
 	} else {
 		return fmt.Errorf("unsupported OS: %s", runtime.GOOS)
 	}
+}
 
+func getDestinationDir() (string, error) {
+	if runtime.GOOS == "darwin" {
+		return filepath.Join(pathutil.UserHomeDir(), "Library"), nil
+	} else if runtime.GOOS == "linux" {
+		return "/opt", nil
+	}
+	return "", fmt.Errorf("unsupported OS: %s", runtime.GOOS)
 }
 
 func getFlutterPlatform() string {

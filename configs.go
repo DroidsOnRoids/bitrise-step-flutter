@@ -26,7 +26,7 @@ func createConfigsModelFromEnvs() ConfigsModel {
 func (configs ConfigsModel) dump() {
 	fmt.Println()
 	log.Infof("Configs:")
-	log.Printf(" - Flutter version (hidden): %s", configs.Version)
+	log.Printf(" - Flutter version: %s", configs.Version)
 	log.Printf(" - WorkingDir: %s", configs.WorkingDir)
 	log.Printf(" - Commands: %s", configs.Commands)
 }
