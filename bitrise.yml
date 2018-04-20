@@ -8,7 +8,7 @@ app:
   - FLUTTER_COMMANDS: config --no-analytics|test
   - BITRISE_STEP_ID: flutter
   - BITRISE_STEP_VERSION: 0.0.1
-  - BITRISE_STEP_GIT_CLONE_URL: https://github.com/DroidsOnRoids/bitrise-step-flutter
+  - BITRISE_STEP_GIT_CLONE_URL: https://github.com/DroidsOnRoids/bitrise-step-flutter.git
   - MY_STEPLIB_REPO_FORK_GIT_URL: $MY_STEPLIB_REPO_FORK_GIT_URL
   - BITRISE_GO_PACKAGES: github.com/DroidsOnRoids/bitrise-step-flutter/
     opts:
