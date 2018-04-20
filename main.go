@@ -24,14 +24,20 @@ func main() {
 	}
 	configs.dump()
 
-	flutterSdkExists, err := pathutil.IsDirExists("/opt/flutter")
+	flutterSdkDir, err := getSdkDestinationDir()
+	if err != nil {
+		log.Errorf("Could not validate config, error: %s", err)
+		os.Exit(5)
+	}
+
+	flutterSdkExists, err := pathutil.IsDirExists(flutterSdkDir)
 	if err != nil {
 		log.Errorf("Could not check if Flutter SDK is installed, error: %s", err)
 		os.Exit(1)
 	}
 
 	if !flutterSdkExists {
-		if err := extractSdk(configs.Version); err != nil {
+		if err := extractSdk(configs.Version, flutterSdkDir); err != nil {
 			log.Errorf("Could not extract Flutter SDK, error: %s", err)
 			os.Exit(2)
 		}
@@ -41,7 +47,9 @@ func main() {
 
 	for _, flutterCommand := range configs.Commands {
 		log.Infof("Executing Flutter command: %s", flutterCommand)
-		bashCommand := fmt.Sprintf("/opt/flutter/bin/flutter %s", flutterCommand)
+
+		flutterExecutablePath := filepath.Join(flutterSdkDir, "bin/flutter")
+		bashCommand := fmt.Sprintf("%s %s", flutterExecutablePath, flutterCommand)
 		err := command.RunCommandInDir(configs.WorkingDir, "bash", "-c", bashCommand)
 		if err != nil {
 			log.Errorf("Flutter invocation failed, error: %s", err)
@@ -57,12 +65,7 @@ func getArchiveExtension() string {
 	return "zip"
 }
 
-func extractSdk(flutterVersion string) error {
-	flutterSdkDestinationDir, err := getDestinationDir()
-	if err != nil {
-		return err
-	}
-
+func extractSdk(flutterVersion, flutterSdkDestinationDir string) error {
 	log.Infof("Extracting Flutter SDK to %s", flutterSdkDestinationDir)
 
 	versionComponents := strings.Split(flutterVersion, "-")
@@ -76,8 +79,10 @@ func extractSdk(flutterVersion string) error {
 		flutterVersion,
 		getArchiveExtension())
 
+	flutterSdkParentDir := filepath.Join(flutterSdkDestinationDir, "..")
+
 	if runtime.GOOS == "darwin" {
-		return command.DownloadAndUnZIP(flutterSdkSourceURL, flutterSdkDestinationDir)
+		return command.DownloadAndUnZIP(flutterSdkSourceURL, flutterSdkParentDir)
 	} else if runtime.GOOS == "linux" {
 
 		file, err := ioutil.TempFile(os.TempDir(), "flutter")
@@ -95,17 +100,17 @@ func extractSdk(flutterVersion string) error {
 			return err
 		}
 
-		return archiver.TarXZ.Open(file.Name(), flutterSdkDestinationDir)
+		return archiver.TarXZ.Open(file.Name(), flutterSdkParentDir)
 	} else {
 		return fmt.Errorf("unsupported OS: %s", runtime.GOOS)
 	}
 }
 
-func getDestinationDir() (string, error) {
+func getSdkDestinationDir() (string, error) {
 	if runtime.GOOS == "darwin" {
-		return filepath.Join(pathutil.UserHomeDir(), "Library"), nil
+		return filepath.Join(pathutil.UserHomeDir(), "Library/flutter"), nil
 	} else if runtime.GOOS == "linux" {
-		return "/opt", nil
+		return "/opt/flutter", nil
 	}
 	return "", fmt.Errorf("unsupported OS: %s", runtime.GOOS)
 }
