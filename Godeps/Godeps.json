@@ -24,6 +24,10 @@
       "Rev": "961320f9011cedf55e1da0578949bf63450a96c0"
     },
     {
+      "ImportPath": "github.com/bitrise-io/go-utils/versions",
+      "Rev": "961320f9011cedf55e1da0578949bf63450a96c0"
+    },
+    {
       "ImportPath": "github.com/dsnet/compress",
       "Rev": "cc9eb1d7ad760af14e8f918698f745e80377af4f"
     },
@@ -50,6 +54,11 @@
     {
       "ImportPath": "github.com/golang/snappy",
       "Rev": "553a641470496b2327abcac10b36396bd98e45c9"
+    },
+    {
+      "ImportPath": "github.com/magiconair/properties",
+      "Comment": "v1.7.6-3-g2c9e950",
+      "Rev": "2c9e9502788518c97fe44e8955cd069417ee89df"
     },
     {
       "ImportPath": "github.com/mholt/archiver",

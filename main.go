@@ -16,6 +16,11 @@ import (
 )
 
 func main() {
+	if err := ensureAndroidSdkSetup(); err != nil {
+		log.Errorf("Could not setup Android SDK, error: %s", err)
+		os.Exit(6)
+	}
+
 	configs := createConfigsModelFromEnvs()
 
 	if err := configs.validate(); err != nil {
