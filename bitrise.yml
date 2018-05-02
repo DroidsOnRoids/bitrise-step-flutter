@@ -3,7 +3,7 @@ default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: ""
 app:
   envs:
-  - FLUTTER_VERSION: 0.2.8-beta
+  - FLUTTER_VERSION: 0.3.1-beta
   - WORKING_DIR: $BITRISE_SOURCE_DIR/flutter-app-example
   - FLUTTER_COMMANDS: doctor --android-licenses|config --no-analytics|test
   - BITRISE_STEP_ID: flutter
