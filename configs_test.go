@@ -41,20 +41,29 @@ func TestValidateConfigsEmptyCommand(t *testing.T) {
 }
 
 func TestCreateConfigsModelFromEnvsVersion(t *testing.T) {
-	os.Setenv("version", "123")
+	err := os.Setenv("version", "123")
+	require.NoError(t, err)
+
 	configs := createConfigsModelFromEnvs()
+
 	require.Equal(t, "123", configs.Version)
 }
 
 func TestCreateConfigsModelFromEnvsWorkingDir(t *testing.T) {
-	os.Setenv("working_dir", "/tmp")
+	err := os.Setenv("working_dir", "/tmp")
+	require.NoError(t, err)
+
 	configs := createConfigsModelFromEnvs()
+
 	require.Equal(t, "/tmp", configs.WorkingDir)
 }
 
 func TestCreateConfigsModelFromEnvsCommands(t *testing.T) {
-	os.Setenv("commands", "doctor|test")
+	err := os.Setenv("commands", "doctor|test")
+	require.NoError(t, err)
+
 	configs := createConfigsModelFromEnvs()
+
 	require.Len(t, configs.Commands, 2)
 	require.Equal(t, "doctor", configs.Commands[0])
 	require.Equal(t, "test", configs.Commands[1])
