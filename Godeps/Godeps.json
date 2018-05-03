@@ -28,6 +28,11 @@
       "Rev": "961320f9011cedf55e1da0578949bf63450a96c0"
     },
     {
+      "ImportPath": "github.com/davecgh/go-spew/spew",
+      "Comment": "v1.1.0-1-g782f496",
+      "Rev": "782f4967f2dc4564575ca782fe2d04090b5faca8"
+    },
+    {
       "ImportPath": "github.com/dsnet/compress",
       "Rev": "cc9eb1d7ad760af14e8f918698f745e80377af4f"
     },
@@ -78,6 +83,21 @@
       "ImportPath": "github.com/pierrec/xxHash/xxHash32",
       "Comment": "v0.1-11-ga0006b1",
       "Rev": "a0006b13c722f7f12368c00a3d3c2ae8a999a0c6"
+    },
+    {
+      "ImportPath": "github.com/pmezard/go-difflib/difflib",
+      "Comment": "v1.0.0",
+      "Rev": "792786c7400a136282c1664665ae0a8db921c6c2"
+    },
+    {
+      "ImportPath": "github.com/stretchr/testify/assert",
+      "Comment": "v1.1.4-72-g2aa2c17",
+      "Rev": "2aa2c176b9dab406a6970f6a55f513e8a8c8b18f"
+    },
+    {
+      "ImportPath": "github.com/stretchr/testify/require",
+      "Comment": "v1.1.4-72-g2aa2c17",
+      "Rev": "2aa2c176b9dab406a6970f6a55f513e8a8c8b18f"
     },
     {
       "ImportPath": "github.com/ulikunitz/xz",
