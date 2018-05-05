@@ -16,10 +16,17 @@ type ConfigsModel struct {
 }
 
 func createConfigsModelFromEnvs() ConfigsModel {
+	var commands []string
+	for _, pth := range strings.Split(os.Getenv("commands"), "|") {
+		if pth != "" {
+			commands = append(commands, pth)
+		}
+	}
+
 	return ConfigsModel{
 		Version:    os.Getenv("version"),
 		WorkingDir: os.Getenv("working_dir"),
-		Commands:   strings.Split(os.Getenv("commands"), "|"),
+		Commands:   commands,
 	}
 }
 
@@ -38,12 +45,6 @@ func (configs ConfigsModel) validate() error {
 
 	if configs.WorkingDir == "" {
 		return errors.New("empty WorkingDir specified")
-	}
-
-	for _, command := range configs.Commands {
-		if command == "" {
-			return errors.New("empty Flutter command specified")
-		}
 	}
 
 	return nil

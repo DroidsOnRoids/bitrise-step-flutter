@@ -31,15 +31,6 @@ func TestValidateConfigsNoCommands(t *testing.T) {
 	require.Error(t, configs.validate())
 }
 
-func TestValidateConfigsEmptyCommand(t *testing.T) {
-	configs := ConfigsModel{
-		Version:    "1",
-		WorkingDir: ".",
-		Commands:   []string{"test", ""},
-	}
-	require.Error(t, configs.validate())
-}
-
 func TestCreateConfigsModelFromEnvsVersion(t *testing.T) {
 	err := os.Setenv("version", "123")
 	require.NoError(t, err)
@@ -60,6 +51,17 @@ func TestCreateConfigsModelFromEnvsWorkingDir(t *testing.T) {
 
 func TestCreateConfigsModelFromEnvsCommands(t *testing.T) {
 	err := os.Setenv("commands", "doctor|test")
+	require.NoError(t, err)
+
+	configs := createConfigsModelFromEnvs()
+
+	require.Len(t, configs.Commands, 2)
+	require.Equal(t, "doctor", configs.Commands[0])
+	require.Equal(t, "test", configs.Commands[1])
+}
+
+func TestCreateConfigsModelFromEnvsEmptyCommands(t *testing.T) {
+	err := os.Setenv("commands", "||doctor||test||")
 	require.NoError(t, err)
 
 	configs := createConfigsModelFromEnvs()
