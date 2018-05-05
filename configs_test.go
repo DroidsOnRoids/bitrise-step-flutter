@@ -26,7 +26,7 @@ func TestValidateConfigsNoCommands(t *testing.T) {
 	configs := ConfigsModel{
 		Version:    "1",
 		WorkingDir: ".",
-		Commands:   []string{""},
+		Commands:   []string{},
 	}
 	require.Error(t, configs.validate())
 }

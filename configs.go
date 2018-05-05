@@ -47,5 +47,9 @@ func (configs ConfigsModel) validate() error {
 		return errors.New("empty WorkingDir specified")
 	}
 
+	if len(configs.Commands) == 0 {
+		return errors.New("no Flutter command specified")
+	}
+
 	return nil
 }
