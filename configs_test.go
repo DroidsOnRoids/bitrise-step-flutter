@@ -41,12 +41,13 @@ func TestCreateConfigsModelFromEnvsVersion(t *testing.T) {
 }
 
 func TestCreateConfigsModelFromEnvsWorkingDir(t *testing.T) {
-	err := os.Setenv("working_dir", "/tmp")
+	tempDir := os.TempDir()
+	err := os.Setenv("working_dir", tempDir)
 	require.NoError(t, err)
 
 	configs := createConfigsModelFromEnvs()
 
-	require.Equal(t, "/tmp", configs.WorkingDir)
+	require.Equal(t, tempDir, configs.WorkingDir)
 }
 
 func TestCreateConfigsModelFromEnvsCommands(t *testing.T) {

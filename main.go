@@ -6,10 +6,6 @@ import (
 	"github.com/bitrise-io/go-utils/command"
 	"fmt"
 	"runtime"
-	"github.com/mholt/archiver"
-	"io"
-	"net/http"
-	"io/ioutil"
 	"github.com/bitrise-io/go-utils/pathutil"
 	"strings"
 	"path/filepath"
@@ -63,13 +59,6 @@ func main() {
 	}
 }
 
-func getArchiveExtension() string {
-	if runtime.GOOS == "linux" {
-		return "tar.xz"
-	}
-	return "zip"
-}
-
 func extractSdk(flutterVersion, flutterSdkDestinationDir string) error {
 	log.Infof("Extracting Flutter SDK to %s", flutterSdkDestinationDir)
 
@@ -89,59 +78,8 @@ func extractSdk(flutterVersion, flutterSdkDestinationDir string) error {
 	if runtime.GOOS == "darwin" {
 		return command.DownloadAndUnZIP(flutterSdkSourceURL, flutterSdkParentDir)
 	} else if runtime.GOOS == "linux" {
-
-		file, err := ioutil.TempFile(os.TempDir(), "flutter")
-		if err != nil {
-			return err
-		}
-
-		defer func() {
-			if err := os.Remove(file.Name()); err != nil {
-				log.Errorf("Failed to remove temporary file:", err)
-			}
-		}()
-
-		if err := downloadFile(flutterSdkSourceURL, file); err != nil {
-			return err
-		}
-
-		return archiver.TarXZ.Open(file.Name(), flutterSdkParentDir)
+		return downloadAndUnTarXZ(flutterSdkSourceURL, flutterSdkParentDir)
 	} else {
 		return fmt.Errorf("unsupported OS: %s", runtime.GOOS)
 	}
-}
-
-func getSdkDestinationDir() (string, error) {
-	if runtime.GOOS == "darwin" {
-		return filepath.Join(pathutil.UserHomeDir(), "Library/flutter"), nil
-	} else if runtime.GOOS == "linux" {
-		return "/opt/flutter", nil
-	}
-	return "", fmt.Errorf("unsupported OS: %s", runtime.GOOS)
-}
-
-func getFlutterPlatform() string {
-	if runtime.GOOS == "darwin" {
-		return "macos"
-	}
-	return runtime.GOOS
-}
-
-func downloadFile(downloadURL string, outFile *os.File) error {
-	resp, err := http.Get(downloadURL)
-	if err != nil {
-		return fmt.Errorf("failed to download from %s, error: %s", downloadURL, err)
-	}
-	defer func() {
-		if err := resp.Body.Close(); err != nil {
-			log.Warnf("Failed to close (%s) body", downloadURL)
-		}
-	}()
-
-	_, err = io.Copy(outFile, resp.Body)
-	if err != nil {
-		return fmt.Errorf("failed to save file %s, error: %s", outFile.Name(), err)
-	}
-
-	return nil
 }
