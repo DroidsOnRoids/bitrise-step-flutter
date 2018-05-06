@@ -13,17 +13,17 @@ import (
 )
 
 func main() {
-	if err := ensureAndroidSdkSetup(); err != nil {
-		log.Errorf("Could not setup Android SDK, error: %s", err)
-		os.Exit(6)
-	}
-
 	var config Config
 	if err := stepconf.Parse(&config); err != nil {
 		log.Errorf("Configuration error: %s\n", err)
 		os.Exit(7)
 	}
 	stepconf.Print(config)
+
+	if err := ensureAndroidSdkSetup(); err != nil {
+		log.Errorf("Could not setup Android SDK, error: %s", err)
+		os.Exit(6)
+	}
 
 	flutterSdkDir, err := getSdkDestinationDir()
 	if err != nil {
