@@ -27,7 +27,7 @@ func main() {
 
 	flutterSdkDir, err := getSdkDestinationDir()
 	if err != nil {
-		log.Errorf("Could not validate config, error: %s", err)
+		log.Errorf("Could not Flutter SDK destination directory, error: %s", err)
 		os.Exit(5)
 	}
 
@@ -43,7 +43,7 @@ func main() {
 			os.Exit(2)
 		}
 	} else {
-		log.Infof("Flutter SDK folder already exists, skipping installation.")
+		log.Infof("Flutter SDK directory already exists, skipping installation.")
 	}
 
 	for _, flutterCommand := range config.Commands {
