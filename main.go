@@ -20,7 +20,7 @@ func main() {
 
 	var config Config
 	if err := stepconf.Parse(&config); err != nil {
-		log.Errorf("Error: %s\n", err)
+		log.Errorf("Configuration error: %s\n", err)
 		os.Exit(7)
 	}
 	stepconf.Print(config)

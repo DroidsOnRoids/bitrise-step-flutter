@@ -4,7 +4,7 @@ package main
 type Config struct {
 	Version    string   `env:"version,required"`
 	WorkingDir string   `env:"working_dir,dir"`
-	Commands   []string `env:"commands"`
+	Commands   []string `env:"commands,required"`
 }
 
 func (config *Config) stripEmptyCommands() {
