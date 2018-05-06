@@ -8,11 +8,11 @@ type Config struct {
 }
 
 func (config *Config) stripEmptyCommands() {
-	var commands []string
-	for _, pth := range config.Commands {
-		if pth != "" {
-			commands = append(commands, pth)
+	var strippedCommands []string
+	for _, command := range config.Commands {
+		if command != "" {
+			strippedCommands = append(strippedCommands, command)
 		}
 	}
-	config.Commands = commands
+	config.Commands = strippedCommands
 }
