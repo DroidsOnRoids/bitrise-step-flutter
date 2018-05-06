@@ -84,7 +84,7 @@ workflows:
             mkdir -p $GOPATH/src/github.com/DroidsOnRoids/
             ln -s $BITRISE_SOURCE_DIR $GOPATH/src/github.com/DroidsOnRoids/bitrise-step-flutter
             cd $GOPATH/src/github.com/DroidsOnRoids/bitrise-step-flutter
-            mkdir $GOPATH/bin
+            mkdir -p $GOPATH/bin
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
             dep ensure
     - change-workdir:
