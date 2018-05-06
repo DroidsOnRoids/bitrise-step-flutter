@@ -97,7 +97,7 @@ func extractSdk(flutterVersion, flutterSdkDestinationDir string) error {
 
 		defer func() {
 			if err := os.Remove(file.Name()); err != nil {
-				log.Errorf("Failed to close remove temporary file:", err)
+				log.Errorf("Failed to remove temporary file:", err)
 			}
 		}()
 
@@ -134,7 +134,7 @@ func downloadFile(downloadURL string, outFile *os.File) error {
 	}
 	defer func() {
 		if err := resp.Body.Close(); err != nil {
-			log.Warnf("failed to close (%s) body", downloadURL)
+			log.Warnf("Failed to close (%s) body", downloadURL)
 		}
 	}()
 
