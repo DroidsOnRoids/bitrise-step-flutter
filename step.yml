@@ -38,7 +38,6 @@ deps:
   apt_get:
   - name: git
   - name: curl
-  - name: xz-utils
   - name: unzip
   - name: libglu1-mesa
 
