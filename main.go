@@ -9,6 +9,7 @@ import (
 	"github.com/bitrise-io/go-utils/pathutil"
 	"strings"
 	"path/filepath"
+	"github.com/bitrise-tools/go-steputils/stepconf"
 )
 
 func main() {
@@ -17,13 +18,12 @@ func main() {
 		os.Exit(6)
 	}
 
-	configs := createConfigsModelFromEnvs()
-
-	if err := configs.validate(); err != nil {
-		log.Errorf("Could not validate config, error: %s", err)
-		os.Exit(4)
+	var config Config
+	if err := stepconf.Parse(&config); err != nil {
+		log.Errorf("Error: %s\n", err)
+		os.Exit(7)
 	}
-	configs.dump()
+	stepconf.Print(config)
 
 	flutterSdkDir, err := getSdkDestinationDir()
 	if err != nil {
@@ -38,7 +38,7 @@ func main() {
 	}
 
 	if !flutterSdkExists {
-		if err := extractSdk(configs.Version, flutterSdkDir); err != nil {
+		if err := extractSdk(config.Version, flutterSdkDir); err != nil {
 			log.Errorf("Could not extract Flutter SDK, error: %s", err)
 			os.Exit(2)
 		}
@@ -46,12 +46,12 @@ func main() {
 		log.Infof("Flutter SDK folder already exists, skipping installation.")
 	}
 
-	for _, flutterCommand := range configs.Commands {
+	for _, flutterCommand := range config.Commands {
 		log.Infof("Executing Flutter command: %s", flutterCommand)
 
 		flutterExecutablePath := filepath.Join(flutterSdkDir, "bin/flutter")
 		bashCommand := fmt.Sprintf("%s %s", flutterExecutablePath, flutterCommand)
-		err := command.RunCommandInDir(configs.WorkingDir, "bash", "-c", bashCommand)
+		err := command.RunCommandInDir(config.WorkingDir, "bash", "-c", bashCommand)
 		if err != nil {
 			log.Errorf("Flutter invocation failed, error: %s", err)
 			os.Exit(3)
