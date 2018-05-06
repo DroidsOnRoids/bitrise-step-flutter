@@ -130,7 +130,7 @@ func getFlutterPlatform() string {
 func downloadFile(downloadURL string, outFile *os.File) error {
 	resp, err := http.Get(downloadURL)
 	if err != nil {
-		return fmt.Errorf("failed to download from (%s), error: %s", downloadURL, err)
+		return fmt.Errorf("failed to download from %s, error: %s", downloadURL, err)
 	}
 	defer func() {
 		if err := resp.Body.Close(); err != nil {
@@ -140,7 +140,7 @@ func downloadFile(downloadURL string, outFile *os.File) error {
 
 	_, err = io.Copy(outFile, resp.Body)
 	if err != nil {
-		return fmt.Errorf("failed to download from (%s), error: %s", downloadURL, err)
+		return fmt.Errorf("failed to save file %s, error: %s", outFile.Name(), err)
 	}
 
 	return nil
