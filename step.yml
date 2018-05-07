@@ -18,25 +18,12 @@ host_os_tags:
   - osx-10.10
   - ubuntu-16.04
 
-# If this step should be available only for certain project types
-# just uncomment this `project_type_tags` section and include all the
-# project types supported by the step. If the step can be used for all
-# project types then you can just remove this section.
-# If no `project_type_tags` specified (or specified as an empty array)
-# that means the step can be used for any project type.
-# You can find more information about project type tags in the Step Development Guideline:
-# https://github.com/bitrise-io/bitrise/blob/master/_docs/step-development-guideline.md
-#
-#
-project_type_tags:
-   - ios
-   - android
-
 # Type tags are used for categorizing steps, for easier step discovery in Step Libraries.
 # You can find more information about type tags in the Step Development Guideline:
 # https://github.com/bitrise-io/bitrise/blob/master/_docs/step-development-guideline.md
 type_tags:
   - build
+  - test
 
 is_requires_admin_user: false
 is_always_run: false
@@ -51,7 +38,7 @@ deps:
   apt_get:
   - name: git
   - name: curl
-  - name: xz-utils
+  - name: unzip
   - name: libglu1-mesa
 
 toolkit:
@@ -60,7 +47,7 @@ toolkit:
 
 
 inputs:
-  - version: 0.2.8-beta
+  - version: 0.3.1-beta
     opts:
       title: "Flutter version"
       summary: Flutter version including channel. Without `v` prefix. E.g. `0.2.8-alpha` or `0.3.0-dev`.

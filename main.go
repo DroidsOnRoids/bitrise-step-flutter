@@ -6,32 +6,28 @@ import (
 	"github.com/bitrise-io/go-utils/command"
 	"fmt"
 	"runtime"
-	"github.com/mholt/archiver"
-	"io"
-	"net/http"
-	"io/ioutil"
 	"github.com/bitrise-io/go-utils/pathutil"
 	"strings"
 	"path/filepath"
+	"github.com/bitrise-tools/go-steputils/stepconf"
 )
 
 func main() {
+	var config Config
+	if err := stepconf.Parse(&config); err != nil {
+		log.Errorf("Configuration error: %s\n", err)
+		os.Exit(7)
+	}
+	stepconf.Print(config)
+
 	if err := ensureAndroidSdkSetup(); err != nil {
 		log.Errorf("Could not setup Android SDK, error: %s", err)
 		os.Exit(6)
 	}
 
-	configs := createConfigsModelFromEnvs()
-
-	if err := configs.validate(); err != nil {
-		log.Errorf("Could not validate config, error: %s", err)
-		os.Exit(4)
-	}
-	configs.dump()
-
 	flutterSdkDir, err := getSdkDestinationDir()
 	if err != nil {
-		log.Errorf("Could not validate config, error: %s", err)
+		log.Errorf("Could not Flutter SDK destination directory, error: %s", err)
 		os.Exit(5)
 	}
 
@@ -42,32 +38,25 @@ func main() {
 	}
 
 	if !flutterSdkExists {
-		if err := extractSdk(configs.Version, flutterSdkDir); err != nil {
+		if err := extractSdk(config.Version, flutterSdkDir); err != nil {
 			log.Errorf("Could not extract Flutter SDK, error: %s", err)
 			os.Exit(2)
 		}
 	} else {
-		log.Infof("Flutter SDK folder already exists, skipping installation.")
+		log.Infof("Flutter SDK directory already exists, skipping installation.")
 	}
 
-	for _, flutterCommand := range configs.Commands {
+	for _, flutterCommand := range config.Commands {
 		log.Infof("Executing Flutter command: %s", flutterCommand)
 
 		flutterExecutablePath := filepath.Join(flutterSdkDir, "bin/flutter")
 		bashCommand := fmt.Sprintf("%s %s", flutterExecutablePath, flutterCommand)
-		err := command.RunCommandInDir(configs.WorkingDir, "bash", "-c", bashCommand)
+		err := command.RunCommandInDir(config.WorkingDir, "bash", "-c", bashCommand)
 		if err != nil {
 			log.Errorf("Flutter invocation failed, error: %s", err)
 			os.Exit(3)
 		}
 	}
-}
-
-func getArchiveExtension() string {
-	if runtime.GOOS == "linux" {
-		return "tar.xz"
-	}
-	return "zip"
 }
 
 func extractSdk(flutterVersion, flutterSdkDestinationDir string) error {
@@ -89,59 +78,8 @@ func extractSdk(flutterVersion, flutterSdkDestinationDir string) error {
 	if runtime.GOOS == "darwin" {
 		return command.DownloadAndUnZIP(flutterSdkSourceURL, flutterSdkParentDir)
 	} else if runtime.GOOS == "linux" {
-
-		file, err := ioutil.TempFile(os.TempDir(), "flutter")
-		if err != nil {
-			return err
-		}
-
-		defer func() {
-			if err := os.Remove(file.Name()); err != nil {
-				log.Errorf("Failed to close remove temporary file:", err)
-			}
-		}()
-
-		if err := downloadFile(flutterSdkSourceURL, file); err != nil {
-			return err
-		}
-
-		return archiver.TarXZ.Open(file.Name(), flutterSdkParentDir)
+		return downloadAndUnTarXZ(flutterSdkSourceURL, flutterSdkParentDir)
 	} else {
 		return fmt.Errorf("unsupported OS: %s", runtime.GOOS)
 	}
-}
-
-func getSdkDestinationDir() (string, error) {
-	if runtime.GOOS == "darwin" {
-		return filepath.Join(pathutil.UserHomeDir(), "Library/flutter"), nil
-	} else if runtime.GOOS == "linux" {
-		return "/opt/flutter", nil
-	}
-	return "", fmt.Errorf("unsupported OS: %s", runtime.GOOS)
-}
-
-func getFlutterPlatform() string {
-	if runtime.GOOS == "darwin" {
-		return "macos"
-	}
-	return runtime.GOOS
-}
-
-func downloadFile(downloadURL string, outFile *os.File) error {
-	resp, err := http.Get(downloadURL)
-	if err != nil {
-		return fmt.Errorf("failed to download from (%s), error: %s", downloadURL, err)
-	}
-	defer func() {
-		if err := resp.Body.Close(); err != nil {
-			log.Warnf("failed to close (%s) body", downloadURL)
-		}
-	}()
-
-	_, err = io.Copy(outFile, resp.Body)
-	if err != nil {
-		return fmt.Errorf("failed to download from (%s), error: %s", downloadURL, err)
-	}
-
-	return nil
 }

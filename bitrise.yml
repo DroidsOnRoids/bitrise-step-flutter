@@ -7,7 +7,7 @@ app:
   - WORKING_DIR: $BITRISE_SOURCE_DIR/flutter-app-example
   - FLUTTER_COMMANDS: doctor --android-licenses|config --no-analytics|test
   - BITRISE_STEP_ID: flutter
-  - BITRISE_STEP_VERSION: 0.0.2
+  - BITRISE_STEP_VERSION: 0.0.3
   - BITRISE_STEP_GIT_CLONE_URL: https://github.com/DroidsOnRoids/bitrise-step-flutter.git
   - MY_STEPLIB_REPO_FORK_GIT_URL: $MY_STEPLIB_REPO_FORK_GIT_URL
   - BITRISE_GO_PACKAGES: github.com/DroidsOnRoids/bitrise-step-flutter/
@@ -84,8 +84,9 @@ workflows:
             mkdir -p $GOPATH/src/github.com/DroidsOnRoids/
             ln -s $BITRISE_SOURCE_DIR $GOPATH/src/github.com/DroidsOnRoids/bitrise-step-flutter
             cd $GOPATH/src/github.com/DroidsOnRoids/bitrise-step-flutter
-            go get github.com/tools/godep
-            godep restore
+            mkdir -p $GOPATH/bin
+            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+            dep ensure
     - change-workdir:
         title: Switch working dir to test / _tmp dir
         description: |-
