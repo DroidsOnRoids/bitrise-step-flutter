@@ -3,11 +3,11 @@ default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: ""
 app:
   envs:
-  - FLUTTER_VERSION: 0.3.1-beta
+  - FLUTTER_VERSION: 0.4.4-beta
   - WORKING_DIR: $BITRISE_SOURCE_DIR/flutter-app-example
   - FLUTTER_COMMANDS: doctor --android-licenses|config --no-analytics|test
   - BITRISE_STEP_ID: flutter
-  - BITRISE_STEP_VERSION: 0.0.3
+  - BITRISE_STEP_VERSION: 0.0.4
   - BITRISE_STEP_GIT_CLONE_URL: https://github.com/DroidsOnRoids/bitrise-step-flutter.git
   - MY_STEPLIB_REPO_FORK_GIT_URL: $MY_STEPLIB_REPO_FORK_GIT_URL
   - BITRISE_GO_PACKAGES: github.com/DroidsOnRoids/bitrise-step-flutter/
@@ -81,12 +81,16 @@ workflows:
             # fail if any commands fails
             set -e
 
+            if [[ "$OSTYPE" == darwin* ]]; then
+              FLUTTER_COMMANDS="$FLUTTER_COMMANDS|build ios"
+            else
+              FLUTTER_COMMANDS="$FLUTTER_COMMANDS|build apk"
+            fi
+            envman add --key FLUTTER_COMMANDS --value "$FLUTTER_COMMANDS"
+
             mkdir -p $GOPATH/src/github.com/DroidsOnRoids/
             ln -s $BITRISE_SOURCE_DIR $GOPATH/src/github.com/DroidsOnRoids/bitrise-step-flutter
             cd $GOPATH/src/github.com/DroidsOnRoids/bitrise-step-flutter
-            mkdir -p $GOPATH/bin
-            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-            dep ensure
     - change-workdir:
         title: Switch working dir to test / _tmp dir
         description: |-
