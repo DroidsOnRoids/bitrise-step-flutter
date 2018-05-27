@@ -11,6 +11,22 @@ title: |-
   Flutter
 summary: |
   Executes one or more Flutter commands. E.g. build, test or install.
+description: |
+  Sample `bitrise.yml` snippet for building iOS and Android apps:
+  ```yaml
+  primary:
+  steps:
+  - certificate-and-profile-installer:
+      inputs:
+      - install_defaults: 'no'
+  - activate-ssh-key:
+      run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+  - git-clone: {}
+  - flutter:
+      inputs:
+      - commands: test|build ios|build apk
+  ```
+
 website: https://github.com/DroidsOnRoids/bitrise-step-flutter
 source_code_url: https://github.com/DroidsOnRoids/bitrise-step-flutter
 support_url: https://github.com/DroidsOnRoids/bitrise-step-flutter/issues
