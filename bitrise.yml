@@ -82,7 +82,7 @@ workflows:
             set -e
 
             if [[ "$OSTYPE" == darwin* ]]; then
-              FLUTTER_COMMANDS="$FLUTTER_COMMANDS|build ios"
+              FLUTTER_COMMANDS="$FLUTTER_COMMANDS|build ios --simulator"
             else
               FLUTTER_COMMANDS="$FLUTTER_COMMANDS|build apk"
             fi
