@@ -2,6 +2,22 @@
 
 Build and install Fluttter app
 
+## Sample workflow for building iOS and Android apps
+
+`bitrise.yml` snippet: 
+```yaml
+primary:
+steps:
+- certificate-and-profile-installer:
+    inputs:
+    - install_defaults: 'no'
+- activate-ssh-key:
+    run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+- git-clone: {}
+- flutter:
+    inputs:
+    - commands: test|build ios|build apk
+```
 
 ## How to use this Step
 
