@@ -2,6 +2,7 @@
 
 
 [[projects]]
+  branch = "master"
   name = "github.com/bitrise-io/go-utils"
   packages = [
     "colorstring",
@@ -13,7 +14,7 @@
     "pointers",
     "versions"
   ]
-  revision = "961320f9011cedf55e1da0578949bf63450a96c0"
+  revision = "d1de0dbcb811588e61362aff67bb700b93c13c17"
 
 [[projects]]
   branch = "master"
@@ -24,7 +25,8 @@
 [[projects]]
   name = "github.com/davecgh/go-spew"
   packages = ["spew"]
-  revision = "782f4967f2dc4564575ca782fe2d04090b5faca8"
+  revision = "8991bc29aa16c548c550c7ff78260e27b9ab7c73"
+  version = "v1.1.1"
 
 [[projects]]
   branch = "master"
@@ -43,19 +45,19 @@
   branch = "master"
   name = "github.com/golang/snappy"
   packages = ["."]
-  revision = "553a641470496b2327abcac10b36396bd98e45c9"
+  revision = "2e65f85255dbc3072edf28d6b5b8efc472979f5a"
 
 [[projects]]
-  branch = "master"
   name = "github.com/magiconair/properties"
   packages = ["."]
-  revision = "2c9e9502788518c97fe44e8955cd069417ee89df"
+  revision = "c2353362d570a7bfa228149c62842019201cfb71"
+  version = "v1.8.0"
 
 [[projects]]
   branch = "master"
   name = "github.com/mholt/archiver"
   packages = ["."]
-  revision = "e4ef56d48eb029648b0e895bb0b6a393ef0829c3"
+  revision = "152026f6533dd5257669e8f8af3c0dce774017eb"
 
 [[projects]]
   branch = "master"
@@ -64,16 +66,13 @@
   revision = "e06696f847aeda6f39a8f0b7cdff193b7690aef6"
 
 [[projects]]
-  branch = "master"
   name = "github.com/pierrec/lz4"
-  packages = ["."]
-  revision = "ed8d4cc3b461464e69798080a0092bd028910298"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/pierrec/xxHash"
-  packages = ["xxHash32"]
-  revision = "a0006b13c722f7f12368c00a3d3c2ae8a999a0c6"
+  packages = [
+    ".",
+    "internal/xxh32"
+  ]
+  revision = "ea731401f5c95a8ba30f15787e5e0fb77c60c66b"
+  version = "v2.0.5"
 
 [[projects]]
   name = "github.com/pmezard/go-difflib"
@@ -87,7 +86,8 @@
     "assert",
     "require"
   ]
-  revision = "2aa2c176b9dab406a6970f6a55f513e8a8c8b18f"
+  revision = "f35b8ab0b5a2cef36673838d662e249dd9c94686"
+  version = "v1.2.2"
 
 [[projects]]
   name = "github.com/ulikunitz/xz"
