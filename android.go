@@ -1,13 +1,13 @@
 package main
 
 import (
-	"os"
-	"github.com/bitrise-io/go-utils/log"
-	"github.com/magiconair/properties"
-	"github.com/bitrise-io/go-utils/versions"
-	"path"
 	"fmt"
 	"github.com/bitrise-io/go-utils/command"
+	"github.com/bitrise-io/go-utils/log"
+	"github.com/bitrise-io/go-utils/versions"
+	"github.com/magiconair/properties"
+	"os"
+	"path"
 )
 
 func ensureAndroidSdkSetup() error {

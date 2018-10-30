@@ -1,10 +1,10 @@
 package main
 
 import (
-	"testing"
+	"github.com/bitrise-tools/go-steputils/stepconf"
 	"github.com/stretchr/testify/require"
 	"os"
-	"github.com/bitrise-tools/go-steputils/stepconf"
+	"testing"
 )
 
 func TestCreateConfigsModelFromEnvs(t *testing.T) {

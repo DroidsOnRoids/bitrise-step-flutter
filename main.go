@@ -1,15 +1,15 @@
 package main
 
 import (
-	"github.com/bitrise-io/go-utils/log"
-	"os"
-	"github.com/bitrise-io/go-utils/command"
 	"fmt"
-	"runtime"
+	"github.com/bitrise-io/go-utils/command"
+	"github.com/bitrise-io/go-utils/log"
 	"github.com/bitrise-io/go-utils/pathutil"
-	"strings"
-	"path/filepath"
 	"github.com/bitrise-tools/go-steputils/stepconf"
+	"os"
+	"path/filepath"
+	"runtime"
+	"strings"
 )
 
 func main() {

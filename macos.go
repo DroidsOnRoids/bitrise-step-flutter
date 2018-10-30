@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/bitrise-io/go-utils/command"
-	"runtime"
 	"github.com/bitrise-io/go-utils/log"
+	"runtime"
 )
 
 func ensureMacOSSetup() error {

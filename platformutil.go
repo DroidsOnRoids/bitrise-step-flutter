@@ -1,10 +1,10 @@
 package main
 
 import (
-	"runtime"
-	"path/filepath"
-	"github.com/bitrise-io/go-utils/pathutil"
 	"fmt"
+	"github.com/bitrise-io/go-utils/pathutil"
+	"path/filepath"
+	"runtime"
 )
 
 func getSdkDestinationDir() (string, error) {

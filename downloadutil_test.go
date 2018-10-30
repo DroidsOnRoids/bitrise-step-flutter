@@ -1,15 +1,15 @@
 package main
 
 import (
-	"testing"
-	"os"
-	"github.com/stretchr/testify/require"
-	"net/http/httptest"
-	"net/http"
-	"io/ioutil"
-	"github.com/mholt/archiver"
-	"path"
 	"github.com/bitrise-io/go-utils/pathutil"
+	"github.com/mholt/archiver"
+	"github.com/stretchr/testify/require"
+	"io/ioutil"
+	"net/http"
+	"net/http/httptest"
+	"os"
+	"path"
+	"testing"
 )
 
 func TestDownloadFileUnreachableURL(t *testing.T) {
