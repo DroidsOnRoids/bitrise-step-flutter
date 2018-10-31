@@ -3,11 +3,12 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:471358c75cab59922381e84511a64074d518fc604e3a493e49e2982dbb271861"
+  digest = "1:efcf7262b823570a5b9a7b10dcd12c4665548302e8ff21393e8d05c3418a436c"
   name = "github.com/bitrise-io/go-utils"
   packages = [
     "colorstring",
     "command",
+    "command/git",
     "errorutil",
     "log",
     "parseutil",
@@ -25,6 +26,14 @@
   packages = ["stepconf"]
   pruneopts = "UT"
   revision = "d4d9e08cc4347e8784bb18419fcdceb932e17019"
+
+[[projects]]
+  digest = "1:705c40022f5c03bf96ffeb6477858d88565064485a513abcd0f11a0911546cb6"
+  name = "github.com/blang/semver"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "2ee87856327ba09384cabd113bc6b5d174e9ec0f"
+  version = "v3.5.1"
 
 [[projects]]
   digest = "1:ffe9824d294da03b391f44e1ae8281281b4afc1bdaa9588c9097785e3af10cec"
@@ -129,10 +138,12 @@
   analyzer-version = 1
   input-imports = [
     "github.com/bitrise-io/go-utils/command",
+    "github.com/bitrise-io/go-utils/command/git",
     "github.com/bitrise-io/go-utils/log",
     "github.com/bitrise-io/go-utils/pathutil",
     "github.com/bitrise-io/go-utils/versions",
     "github.com/bitrise-tools/go-steputils/stepconf",
+    "github.com/blang/semver",
     "github.com/magiconair/properties",
     "github.com/mholt/archiver",
     "github.com/stretchr/testify/require",
