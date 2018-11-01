@@ -57,6 +57,9 @@ workflows:
             bitrise share create --stepid "${BITRISE_STEP_ID}" --tag "$(git describe --tags --exact-match)" --git "${BITRISE_STEP_GIT_CLONE_URL}"
             bitrise share finish
   test:
+    after_run:
+    - test-master
+    - test-ecf577ce5a7d8f3df1e320bc160d9f3eaf4a2e07
     steps:
     - go-list: {}
     - errcheck: {}
