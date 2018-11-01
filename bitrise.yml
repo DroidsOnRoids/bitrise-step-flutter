@@ -86,10 +86,13 @@ workflows:
         inputs:
         - path: ./_tmp_ecf577ce5a7d8f3df1e320bc160d9f3eaf4a2e07
         - is_create_path: true
-    - git-clone:
+    - script:
+        title: Clone sample app
         inputs:
-        - clone_into_dir: .
-        - repository_url: https://github.com/DroidsOnRoidsPlayground/flutter-app-example.git
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            git clone https://github.com/DroidsOnRoidsPlayground/flutter-app-example.git
     - path::./:
         title: Step Test
         inputs:
@@ -103,10 +106,13 @@ workflows:
         inputs:
         - path: ./_tmp_master
         - is_create_path: true
-    - git-clone:
+    - script:
+        title: Clone sample app
         inputs:
-        - clone_into_dir: .
-        - repository_url: https://github.com/DroidsOnRoidsPlayground/flutter-app-example.git
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            git clone https://github.com/DroidsOnRoidsPlayground/flutter-app-example.git
     - path::./:
         title: Step Test
         inputs:
