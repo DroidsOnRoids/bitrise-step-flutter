@@ -57,8 +57,6 @@ workflows:
             bitrise share create --stepid "${BITRISE_STEP_ID}" --tag "$(git describe --tags --exact-match)" --git "${BITRISE_STEP_GIT_CLONE_URL}"
             bitrise share finish
   test:
-    after_run:
-    - test-master
     steps:
     - go-list: {}
     - errcheck: {}
@@ -85,18 +83,15 @@ workflows:
         inputs:
         - path: ./_tmp_ecf577ce5a7d8f3df1e320bc160d9f3eaf4a2e07
         - is_create_path: true
-    - script:
-        title: Clone sample app
+    - git-clone:
         inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            set -e
-            git clone https://github.com/DroidsOnRoidsPlayground/flutter-app-example.git
+        - clone_into_dir: .
+        - repository_url: https://github.com/DroidsOnRoidsPlayground/flutter-app-example.git
     - path::./:
         title: Step Test
         inputs:
-        - version: master
-        - working_dir: $BITRISE_SOURCE_DIR/flutter-app-example-ecf577ce5a7d8f3df1e320bc160d9f3eaf4a2e07
+        - version: ecf577ce5a7d8f3df1e320bc160d9f3eaf4a2e07
+        - working_dir: flutter-app-example
         - commands: $FLUTTER_COMMANDS
   test-master:
     steps:
@@ -105,16 +100,13 @@ workflows:
         inputs:
         - path: ./_tmp_master
         - is_create_path: true
-    - script:
-        title: Clone sample app
+    - git-clone:
         inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            set -e
-            git clone https://github.com/DroidsOnRoidsPlayground/flutter-app-example.git
+        - clone_into_dir: .
+        - repository_url: https://github.com/DroidsOnRoidsPlayground/flutter-app-example.git
     - path::./:
         title: Step Test
         inputs:
         - version: master
-        - working_dir: $BITRISE_SOURCE_DIR/flutter-app-example-master
+        - working_dir: flutter-app-example
         - commands: $FLUTTER_COMMANDS
