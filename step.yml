@@ -66,7 +66,7 @@ inputs:
   - version: 0.9.4-beta
     opts:
       title: "Flutter version"
-      summary: Flutter version including channel. Without `v` prefix. E.g. `0.2.8-alpha` or `0.3.0-dev`.
+      summary: Flutter release version or repository tag, without `v` prefix. E.g. `0.9.4-beta` or `0.10.0` or `master`.
       is_expand: true
       is_required: true
 

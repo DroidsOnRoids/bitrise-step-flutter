@@ -3,11 +3,8 @@ default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: ""
 app:
   envs:
-  - FLUTTER_VERSION: 0.9.4-beta
-  - WORKING_DIR: $BITRISE_SOURCE_DIR/flutter-app-example
   - FLUTTER_COMMANDS: doctor --android-licenses|config --no-analytics|test
   - BITRISE_STEP_ID: flutter
-  - BITRISE_STEP_VERSION: 0.0.6
   - BITRISE_STEP_GIT_CLONE_URL: https://github.com/DroidsOnRoids/bitrise-step-flutter.git
   - MY_STEPLIB_REPO_FORK_GIT_URL: $MY_STEPLIB_REPO_FORK_GIT_URL
   - BITRISE_GO_PACKAGES: github.com/DroidsOnRoids/bitrise-step-flutter/
@@ -49,7 +46,6 @@ workflows:
     envs:
     - MY_STEPLIB_REPO_FORK_GIT_URL: $MY_STEPLIB_REPO_FORK_GIT_URL
     - BITRISE_STEP_ID: $BITRISE_STEP_ID
-    - BITRISE_STEP_VERSION: $BITRISE_STEP_VERSION
     - BITRISE_STEP_GIT_CLONE_URL: $BITRISE_STEP_GIT_CLONE_URL
     steps:
     - script:
@@ -58,21 +54,17 @@ workflows:
             #!/bin/bash
             set -ex
             bitrise share start -c "${MY_STEPLIB_REPO_FORK_GIT_URL}"
-            bitrise share create --stepid "${BITRISE_STEP_ID}" --tag "${BITRISE_STEP_VERSION}" --git "${BITRISE_STEP_GIT_CLONE_URL}"
+            bitrise share create --stepid "${BITRISE_STEP_ID}" --tag "$(git describe --tags --exact-match)" --git "${BITRISE_STEP_GIT_CLONE_URL}"
             bitrise share finish
   test:
+    after_run:
+    - test-master
+    - test-ecf577ce5a7d8f3df1e320bc160d9f3eaf4a2e07
     steps:
-    - script:
-        title: Clone sample app
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            git clone https://github.com/DroidsOnRoidsPlayground/flutter-app-example.git
+    - go-list: {}
+    - errcheck: {}
+    - go-test: {}
+    - golint: {}
     - script:
         title: Setup tests
         inputs:
@@ -87,28 +79,43 @@ workflows:
               FLUTTER_COMMANDS="$FLUTTER_COMMANDS|build apk"
             fi
             envman add --key FLUTTER_COMMANDS --value "$FLUTTER_COMMANDS"
-
-            mkdir -p $GOPATH/src/github.com/DroidsOnRoids/
-            ln -s $BITRISE_SOURCE_DIR $GOPATH/src/github.com/DroidsOnRoids/bitrise-step-flutter
-            cd $GOPATH/src/github.com/DroidsOnRoids/bitrise-step-flutter
+  test-ecf577ce5a7d8f3df1e320bc160d9f3eaf4a2e07:
+    steps:
     - change-workdir:
-        title: Switch working dir to test / _tmp dir
-        description: |-
-          To prevent step testing issues, like referencing relative
-          files with just './some-file' in the step's code, which would
-          work for testing the step from this directory directly
-          but would break if the step is included in another `bitrise.yml`.
-        run_if: "true"
+        title: Switch working dir to test / _tmp_master dir
         inputs:
-        - path: ./_tmp
+        - path: ./_tmp_ecf577ce5a7d8f3df1e320bc160d9f3eaf4a2e07
         - is_create_path: true
-    - errcheck: {}
-    - go-test: {}
-    - golint: {}
+    - script:
+        title: Clone sample app
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            git clone https://github.com/DroidsOnRoidsPlayground/flutter-app-example.git
     - path::./:
         title: Step Test
-        run_if: "true"
         inputs:
-        - version: $FLUTTER_VERSION
-        - working_dir: $WORKING_DIR
+        - version: ecf577ce5a7d8f3df1e320bc160d9f3eaf4a2e07
+        - working_dir: flutter-app-example
+        - commands: $FLUTTER_COMMANDS
+  test-master:
+    steps:
+    - change-workdir:
+        title: Switch working dir to test / _tmp_master dir
+        inputs:
+        - path: ./_tmp_master
+        - is_create_path: true
+    - script:
+        title: Clone sample app
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            git clone https://github.com/DroidsOnRoidsPlayground/flutter-app-example.git
+    - path::./:
+        title: Step Test
+        inputs:
+        - version: master
+        - working_dir: flutter-app-example
         - commands: $FLUTTER_COMMANDS

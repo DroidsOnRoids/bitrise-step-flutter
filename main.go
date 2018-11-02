@@ -1,15 +1,17 @@
 package main
 
 import (
-	"github.com/bitrise-io/go-utils/log"
-	"os"
-	"github.com/bitrise-io/go-utils/command"
 	"fmt"
-	"runtime"
+	"github.com/bitrise-io/go-utils/command"
+	"github.com/bitrise-io/go-utils/command/git"
+	"github.com/bitrise-io/go-utils/log"
 	"github.com/bitrise-io/go-utils/pathutil"
-	"strings"
-	"path/filepath"
 	"github.com/bitrise-tools/go-steputils/stepconf"
+	"github.com/blang/semver"
+	"os"
+	"path/filepath"
+	"runtime"
+	"strings"
 )
 
 func main() {
@@ -43,9 +45,15 @@ func main() {
 	}
 
 	if !flutterSdkExists {
-		if err := extractSdk(config.Version, flutterSdkDir); err != nil {
-			log.Errorf("Could not extract Flutter SDK, error: %s", err)
-			os.Exit(2)
+		log.Infof("Extracting Flutter SDK to %s", flutterSdkDir)
+
+		if err := downloadAndExtractReleaseSdk(config.Version, flutterSdkDir); err != nil {
+			log.Infof("Version %s not found in releases, trying snapshot.", config.Version)
+
+			if err := downloadAndExtractSnapshotSdk(config.Version, flutterSdkDir); err != nil {
+				log.Errorf("Could not extract Flutter SDK, error: %s", err)
+				os.Exit(2)
+			}
 		}
 	} else {
 		log.Infof("Flutter SDK directory already exists, skipping installation.")
@@ -64,9 +72,7 @@ func main() {
 	}
 }
 
-func extractSdk(flutterVersion, flutterSdkDestinationDir string) error {
-	log.Infof("Extracting Flutter SDK to %s", flutterSdkDestinationDir)
-
+func downloadAndExtractReleaseSdk(flutterVersion, flutterSdkDestinationDir string) error {
 	versionComponents := strings.Split(flutterVersion, "-")
 	channel := versionComponents[len(versionComponents)-1]
 
@@ -87,4 +93,17 @@ func extractSdk(flutterVersion, flutterSdkDestinationDir string) error {
 	} else {
 		return fmt.Errorf("unsupported OS: %s", runtime.GOOS)
 	}
+}
+
+func downloadAndExtractSnapshotSdk(flutterVersion, flutterSdkDestinationDir string) error {
+	if _, err := semver.Parse(flutterVersion); err == nil {
+		flutterVersion = "v" + flutterVersion
+	}
+
+	gitRepo, err := git.New(flutterSdkDestinationDir)
+	if err != nil {
+		return err
+	}
+
+	return gitRepo.CloneTagOrBranch("https://github.com/flutter/flutter.git", flutterVersion).Run()
 }

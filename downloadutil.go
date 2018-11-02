@@ -1,13 +1,13 @@
 package main
 
 import (
-	"os"
+	"fmt"
 	"github.com/bitrise-io/go-utils/log"
 	"github.com/mholt/archiver"
+	"io"
 	"io/ioutil"
 	"net/http"
-	"fmt"
-	"io"
+	"os"
 )
 
 func downloadAndUnTarXZ(url, dirPath string) error {

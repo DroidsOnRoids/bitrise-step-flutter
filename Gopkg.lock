@@ -3,11 +3,12 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:471358c75cab59922381e84511a64074d518fc604e3a493e49e2982dbb271861"
+  digest = "1:efcf7262b823570a5b9a7b10dcd12c4665548302e8ff21393e8d05c3418a436c"
   name = "github.com/bitrise-io/go-utils"
   packages = [
     "colorstring",
     "command",
+    "command/git",
     "errorutil",
     "log",
     "parseutil",
@@ -25,6 +26,14 @@
   packages = ["stepconf"]
   pruneopts = "UT"
   revision = "d4d9e08cc4347e8784bb18419fcdceb932e17019"
+
+[[projects]]
+  digest = "1:705c40022f5c03bf96ffeb6477858d88565064485a513abcd0f11a0911546cb6"
+  name = "github.com/blang/semver"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "2ee87856327ba09384cabd113bc6b5d174e9ec0f"
+  version = "v3.5.1"
 
 [[projects]]
   digest = "1:ffe9824d294da03b391f44e1ae8281281b4afc1bdaa9588c9097785e3af10cec"
@@ -74,12 +83,12 @@
   revision = "de0d89e255e17c8d75a40122055763e743ab0593"
 
 [[projects]]
-  branch = "master"
-  digest = "1:3bdb4203c03569a564d6a4bd54d84315575cebb2d76471f8676f8ee8c402005e"
+  digest = "1:b93a939355dc613ca1c23bf39f6d4c207da431a31dd8af001cc334ad24cab9d3"
   name = "github.com/nwaples/rardecode"
   packages = ["."]
   pruneopts = "UT"
-  revision = "e06696f847aeda6f39a8f0b7cdff193b7690aef6"
+  revision = "cc3e4b2381762c56dbcdf9f93be03349a1dc1c14"
+  version = "v1.0.0"
 
 [[projects]]
   digest = "1:e39a5ee8fcbec487f8fc68863ef95f2b025e0739b0e4aa55558a2b4cf8f0ecf0"
@@ -112,7 +121,7 @@
   version = "v1.2.2"
 
 [[projects]]
-  digest = "1:4aeb3860275fa1fd60cccfb5a6ef85da438bf17402e1e84412ade4d4b55066a0"
+  digest = "1:db345c377984d0907323c09a9b17f11d995a59649fd38f909727df358b5f9020"
   name = "github.com/ulikunitz/xz"
   packages = [
     ".",
@@ -121,18 +130,20 @@
     "lzma",
   ]
   pruneopts = "UT"
-  revision = "0c6b41e72360850ca4f98dc341fd999726ea007f"
-  version = "v0.5.4"
+  revision = "590df8077fbcb06ad62d7714da06c00e5dd2316d"
+  version = "v0.5.5"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
     "github.com/bitrise-io/go-utils/command",
+    "github.com/bitrise-io/go-utils/command/git",
     "github.com/bitrise-io/go-utils/log",
     "github.com/bitrise-io/go-utils/pathutil",
     "github.com/bitrise-io/go-utils/versions",
     "github.com/bitrise-tools/go-steputils/stepconf",
+    "github.com/blang/semver",
     "github.com/magiconair/properties",
     "github.com/mholt/archiver",
     "github.com/stretchr/testify/require",
