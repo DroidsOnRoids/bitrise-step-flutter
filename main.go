@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/bitrise-io/go-utils/command"
 	"github.com/bitrise-io/go-utils/command/git"
+	"github.com/bitrise-io/go-utils/fileutil"
 	"github.com/bitrise-io/go-utils/log"
 	"github.com/bitrise-io/go-utils/pathutil"
 	"github.com/bitrise-tools/go-steputils/stepconf"
@@ -34,7 +35,7 @@ func main() {
 
 	flutterSdkDir, err := getSdkDestinationDir()
 	if err != nil {
-		log.Errorf("Could not Flutter SDK destination directory, error: %s", err)
+		log.Errorf("Could not calculate Flutter SDK destination directory path, error: %s", err)
 		os.Exit(5)
 	}
 
@@ -57,6 +58,13 @@ func main() {
 		}
 	} else {
 		log.Infof("Flutter SDK directory already exists, skipping installation.")
+
+		flutterVersion, err := fileutil.ReadStringFromFile(flutterSdkDir + "/version")
+		if err != nil {
+			log.Warnf("Could not determine installed Flutter version, error: %s", err)
+		} else if flutterVersion != config.Version {
+			log.Warnf("Already installed Flutter version %s will be used instead of requested version %s ", flutterVersion, config.Version)
+		}
 	}
 
 	for _, flutterCommand := range config.Commands {

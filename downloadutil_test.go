@@ -58,7 +58,7 @@ func TestDownloadAnUnTarXZSuccessfully(t *testing.T) {
 	const archiveFileName = "test.tar.xz"
 	archiveFile := path.Join(archiveDir, archiveFileName)
 
-	err = archiver.TarXZ.Make(archiveFile, []string{dummyFile.Name()})
+	err = archiver.Archive([]string{dummyFile.Name()}, archiveFile)
 	require.NoError(t, err)
 
 	ts := httptest.NewServer(http.FileServer(http.Dir(archiveDir)))
