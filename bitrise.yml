@@ -7,9 +7,7 @@ app:
   - BITRISE_STEP_ID: flutter
   - BITRISE_STEP_GIT_CLONE_URL: https://github.com/DroidsOnRoids/bitrise-step-flutter.git
   - MY_STEPLIB_REPO_FORK_GIT_URL: $MY_STEPLIB_REPO_FORK_GIT_URL
-  - BITRISE_GO_PACKAGES: github.com/DroidsOnRoids/bitrise-step-flutter/
-    opts:
-      is_expand: false
+
 workflows:
   audit-this-step:
     steps:
@@ -60,6 +58,7 @@ workflows:
     after_run:
     - test-master
     - test-ecf577ce5a7d8f3df1e320bc160d9f3eaf4a2e07
+    - test-multiple-versions
     steps:
     - go-list: {}
     - errcheck: {}
@@ -119,3 +118,29 @@ workflows:
         - version: master
         - working_dir: flutter-app-example
         - commands: $FLUTTER_COMMANDS
+  test-multiple-versions:
+    steps:
+      - change-workdir:
+          title: Switch working dir to test / _tmp_multiple dir
+          inputs:
+            - path: ./_tmp_multiple
+            - is_create_path: true
+      - script:
+          title: Clone sample app
+          inputs:
+            - content: |-
+                #!/usr/bin/env bash
+                set -e
+                git clone https://github.com/DroidsOnRoidsPlayground/flutter-app-example.git
+      - path::./:
+          title: Step Test
+          inputs:
+            - version: ecf577ce5a7d8f3df1e320bc160d9f3eaf4a2e07
+            - working_dir: flutter-app-example
+            - commands: $FLUTTER_COMMANDS
+      - path::./:
+          title: Step Test
+          inputs:
+            - version: master
+            - working_dir: flutter-app-example
+            - commands: $FLUTTER_COMMANDS

@@ -11,7 +11,7 @@ import (
 )
 
 func downloadAndUnTarXZ(url, dirPath string) error {
-	file, err := ioutil.TempFile("", "flutter")
+	file, err := ioutil.TempFile("", "flutter.*.tar.xz")
 	if err != nil {
 		return err
 	}
@@ -29,7 +29,7 @@ func downloadAndUnTarXZ(url, dirPath string) error {
 		return err
 	}
 
-	return archiver.TarXZ.Open(file.Name(), dirPath)
+	return archiver.Unarchive(file.Name(), dirPath)
 }
 
 func downloadFile(downloadURL string, outFile *os.File) error {
