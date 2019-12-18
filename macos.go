@@ -13,7 +13,7 @@ func ensureMacOSSetup() error {
 
 	if err := command.RunCommand("python", "-c", "import six"); err != nil {
 		log.Infof("six Python module not found, installing it with easy_install...")
-		return command.RunCommand("sudo", "easy_install", "six")
+		return command.RunCommand("sudo", "easy_install-3.7", "six")
 	}
 
 	return nil
