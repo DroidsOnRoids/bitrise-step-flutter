@@ -7,16 +7,15 @@ app:
   - BITRISE_STEP_ID: flutter
   - BITRISE_STEP_GIT_CLONE_URL: https://github.com/DroidsOnRoids/bitrise-step-flutter.git
   - MY_STEPLIB_REPO_FORK_GIT_URL: $MY_STEPLIB_REPO_FORK_GIT_URL
-
 workflows:
   audit-this-step:
     steps:
-    - script:
+    - script@1:
         inputs:
-        - content: |-
-            #!/bin/bash
-            set -ex
-            stepman audit --step-yml ./step.yml
+          - content: |-
+              #!/bin/bash
+              set -ex
+              stepman audit --step-yml ./step.yml
   share-this-step:
     description: |-
       If this is the first time you try to share a Step you should
@@ -46,52 +45,52 @@ workflows:
     - BITRISE_STEP_ID: $BITRISE_STEP_ID
     - BITRISE_STEP_GIT_CLONE_URL: $BITRISE_STEP_GIT_CLONE_URL
     steps:
-    - script:
-        inputs:
-        - content: |-
-            #!/bin/bash
-            set -ex
-            bitrise share start -c "${MY_STEPLIB_REPO_FORK_GIT_URL}"
-            bitrise share create --stepid "${BITRISE_STEP_ID}" --tag "$(git describe --tags --exact-match)" --git "${BITRISE_STEP_GIT_CLONE_URL}"
-            bitrise share finish
+      - script@1:
+          inputs:
+            - content: |-
+                #!/bin/bash
+                set -ex
+                bitrise share start -c "${MY_STEPLIB_REPO_FORK_GIT_URL}"
+                bitrise share create --stepid "${BITRISE_STEP_ID}" --tag "$(git describe --tags --exact-match)" --git "${BITRISE_STEP_GIT_CLONE_URL}"
+                bitrise share finish
   test:
     after_run:
     - test-master
     - test-ecf577ce5a7d8f3df1e320bc160d9f3eaf4a2e07
     - test-multiple-versions
     steps:
-    - go-list: {}
-    - errcheck: {}
-    - go-test: {}
-    - golint: {}
-    - script:
-        title: Setup tests
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
+      - go-list@0: {}
+      - errcheck@0: {}
+      - go-test@1: {}
+      - golint@0: {}
+      - script@1:
+          title: Setup tests
+          inputs:
+            - content: |-
+                #!/usr/bin/env bash
+                # fail if any commands fails
+                set -e
 
-            if [[ "$OSTYPE" == darwin* ]]; then
-              FLUTTER_COMMANDS="$FLUTTER_COMMANDS|build ios --simulator"
-            else
+                if [[ "$OSTYPE" == darwin* ]]; then
+                  FLUTTER_COMMANDS="$FLUTTER_COMMANDS|build ios --simulator"
+                else
               FLUTTER_COMMANDS="$FLUTTER_COMMANDS|build apk"
             fi
             envman add --key FLUTTER_COMMANDS --value "$FLUTTER_COMMANDS"
   test-ecf577ce5a7d8f3df1e320bc160d9f3eaf4a2e07:
     steps:
-    - change-workdir:
-        title: Switch working dir to test / _tmp_master dir
-        inputs:
-        - path: ./_tmp_ecf577ce5a7d8f3df1e320bc160d9f3eaf4a2e07
-        - is_create_path: true
-    - script:
-        title: Clone sample app
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            set -e
-            git clone https://github.com/DroidsOnRoidsPlayground/flutter-app-example.git
+      - change-workdir@1:
+          title: Switch working dir to test / _tmp_master dir
+          inputs:
+            - path: ./_tmp_ecf577ce5a7d8f3df1e320bc160d9f3eaf4a2e07
+            - is_create_path: true
+      - script@1:
+          title: Clone sample app
+          inputs:
+            - content: |-
+                #!/usr/bin/env bash
+                set -e
+                git clone https://github.com/DroidsOnRoidsPlayground/flutter-app-example.git
     - path::./:
         title: Step Test
         inputs:
@@ -100,18 +99,18 @@ workflows:
         - commands: $FLUTTER_COMMANDS
   test-master:
     steps:
-    - change-workdir:
-        title: Switch working dir to test / _tmp_master dir
-        inputs:
-        - path: ./_tmp_master
-        - is_create_path: true
-    - script:
-        title: Clone sample app
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            set -e
-            git clone https://github.com/DroidsOnRoidsPlayground/flutter-app-example.git
+      - change-workdir@1:
+          title: Switch working dir to test / _tmp_master dir
+          inputs:
+            - path: ./_tmp_master
+            - is_create_path: true
+      - script@1:
+          title: Clone sample app
+          inputs:
+            - content: |-
+                #!/usr/bin/env bash
+                set -e
+                git clone https://github.com/DroidsOnRoidsPlayground/flutter-app-example.git
     - path::./:
         title: Step Test
         inputs:
@@ -120,12 +119,12 @@ workflows:
         - commands: $FLUTTER_COMMANDS
   test-multiple-versions:
     steps:
-      - change-workdir:
+      - change-workdir@1:
           title: Switch working dir to test / _tmp_multiple dir
           inputs:
             - path: ./_tmp_multiple
             - is_create_path: true
-      - script:
+      - script@1:
           title: Clone sample app
           inputs:
             - content: |-
