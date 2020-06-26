@@ -7,10 +7,11 @@ app:
   - BITRISE_STEP_ID: flutter
   - BITRISE_STEP_GIT_CLONE_URL: https://github.com/DroidsOnRoids/bitrise-step-flutter.git
   - MY_STEPLIB_REPO_FORK_GIT_URL: $MY_STEPLIB_REPO_FORK_GIT_URL
+
 workflows:
   audit-this-step:
     steps:
-    - script@1:
+    - script:
         inputs:
           - content: |-
               #!/bin/bash
@@ -45,7 +46,7 @@ workflows:
     - BITRISE_STEP_ID: $BITRISE_STEP_ID
     - BITRISE_STEP_GIT_CLONE_URL: $BITRISE_STEP_GIT_CLONE_URL
     steps:
-      - script@1:
+      - script:
           inputs:
             - content: |-
                 #!/bin/bash
@@ -59,11 +60,11 @@ workflows:
     - test-ecf577ce5a7d8f3df1e320bc160d9f3eaf4a2e07
     - test-multiple-versions
     steps:
-      - go-list@0: {}
-      - errcheck@0: {}
-      - go-test@1: {}
-      - golint@0: {}
-      - script@1:
+      - go-list: {}
+      - errcheck: {}
+      - go-test: {}
+      - golint: {}
+      - script:
           title: Setup tests
           inputs:
             - content: |-
@@ -74,57 +75,57 @@ workflows:
                 if [[ "$OSTYPE" == darwin* ]]; then
                   FLUTTER_COMMANDS="$FLUTTER_COMMANDS|build ios --simulator"
                 else
-              FLUTTER_COMMANDS="$FLUTTER_COMMANDS|build apk"
-            fi
-            envman add --key FLUTTER_COMMANDS --value "$FLUTTER_COMMANDS"
+                  FLUTTER_COMMANDS="$FLUTTER_COMMANDS|build apk"
+                fi
+                envman add --key FLUTTER_COMMANDS --value "$FLUTTER_COMMANDS"
   test-ecf577ce5a7d8f3df1e320bc160d9f3eaf4a2e07:
     steps:
-      - change-workdir@1:
+      - change-workdir:
           title: Switch working dir to test / _tmp_master dir
           inputs:
             - path: ./_tmp_ecf577ce5a7d8f3df1e320bc160d9f3eaf4a2e07
             - is_create_path: true
-      - script@1:
+      - script:
           title: Clone sample app
           inputs:
             - content: |-
                 #!/usr/bin/env bash
                 set -e
                 git clone https://github.com/DroidsOnRoidsPlayground/flutter-app-example.git
-    - path::./:
-        title: Step Test
-        inputs:
-        - version: ecf577ce5a7d8f3df1e320bc160d9f3eaf4a2e07
-        - working_dir: flutter-app-example
-        - commands: $FLUTTER_COMMANDS
+      - path::./:
+          title: Step Test
+          inputs:
+            - version: ecf577ce5a7d8f3df1e320bc160d9f3eaf4a2e07
+            - working_dir: flutter-app-example
+            - commands: $FLUTTER_COMMANDS
   test-master:
     steps:
-      - change-workdir@1:
+      - change-workdir:
           title: Switch working dir to test / _tmp_master dir
           inputs:
             - path: ./_tmp_master
             - is_create_path: true
-      - script@1:
+      - script:
           title: Clone sample app
           inputs:
             - content: |-
                 #!/usr/bin/env bash
                 set -e
                 git clone https://github.com/DroidsOnRoidsPlayground/flutter-app-example.git
-    - path::./:
-        title: Step Test
-        inputs:
-        - version: master
-        - working_dir: flutter-app-example
-        - commands: $FLUTTER_COMMANDS
+      - path::./:
+          title: Step Test
+          inputs:
+            - version: master
+            - working_dir: flutter-app-example
+            - commands: $FLUTTER_COMMANDS
   test-multiple-versions:
     steps:
-      - change-workdir@1:
+      - change-workdir:
           title: Switch working dir to test / _tmp_multiple dir
           inputs:
             - path: ./_tmp_multiple
             - is_create_path: true
-      - script@1:
+      - script:
           title: Clone sample app
           inputs:
             - content: |-
