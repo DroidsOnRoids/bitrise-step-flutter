@@ -77,3 +77,15 @@ func TestDownloadAnUnTarXZSuccessfully(t *testing.T) {
 	require.NoError(t, os.RemoveAll(destinationDir))
 	require.NoError(t, os.RemoveAll(dummyFile.Name()))
 }
+
+func TestNormalizePre117SemanticVersion(t *testing.T) {
+	require.Equal(t, "v1.16.9", normalizeFlutterVersion("1.16.9"))
+}
+
+func TestNormalizePost117SemanticVersion(t *testing.T) {
+	require.Equal(t, "1.17.0", normalizeFlutterVersion("1.17.0"))
+}
+
+func TestNormalizeNonSemanticVersion(t *testing.T) {
+	require.Equal(t, "master", normalizeFlutterVersion("master"))
+}

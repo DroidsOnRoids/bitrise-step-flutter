@@ -8,7 +8,6 @@ import (
 	"github.com/bitrise-io/go-utils/log"
 	"github.com/bitrise-io/go-utils/pathutil"
 	"github.com/bitrise-tools/go-steputils/stepconf"
-	"github.com/blang/semver"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -104,10 +103,8 @@ func downloadAndExtractReleaseSdk(flutterVersion, flutterSdkDestinationDir strin
 }
 
 func downloadAndExtractSnapshotSdk(flutterVersion, flutterSdkDestinationDir string) error {
-	if _, err := semver.Parse(flutterVersion); err == nil {
-		flutterVersion = "v" + flutterVersion
-	}
 
+	flutterVersion = normalizeFlutterVersion(flutterVersion)
 	gitRepo, err := git.New(flutterSdkDestinationDir)
 	if err != nil {
 		return err
