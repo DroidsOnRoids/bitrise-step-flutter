@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/bitrise-io/go-utils/log"
+	"github.com/blang/semver"
 	"github.com/mholt/archiver"
 	"io"
 	"io/ioutil"
@@ -54,4 +55,13 @@ func downloadFile(downloadURL string, outFile *os.File) error {
 	}
 
 	return nil
+}
+
+func normalizeFlutterVersion(flutterVersion string) string {
+	if version, err := semver.Parse(flutterVersion); err == nil {
+		if version.LT(semver.MustParse("1.17.0")) {
+			return "v" + flutterVersion
+		}
+	}
+	return flutterVersion
 }

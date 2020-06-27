@@ -11,7 +11,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:214f7a18b05124b6552b0e5e17be740c9cf5c2dae450809aa4615ea280d83bef"
+  digest = "1:dbde31e1e437f62eb841c2fcb1998aec848393cf98d8f79e9ca5eb81295c669e"
   name = "github.com/bitrise-io/go-utils"
   packages = [
     "colorstring",
@@ -26,23 +26,23 @@
     "versions",
   ]
   pruneopts = "UT"
-  revision = "4502d1f33875a0f8d7d6b73ba877a312b836fe40"
+  revision = "e212188d99b41373b4ff8b69e7b1f677bc427bde"
 
 [[projects]]
   branch = "master"
-  digest = "1:a3afea7f3c972b809af1a79472585115af175fbf1bcc5bebccd495f19bb551db"
+  digest = "1:caf5b6526ab478df1debb4048cc99489d3954975457c4ba63441f489c9053ea2"
   name = "github.com/bitrise-tools/go-steputils"
   packages = ["stepconf"]
   pruneopts = "UT"
-  revision = "f540824d77dfd382ce84fd0ee0a9da2fba1cce0a"
+  revision = "94490ca44ddb645764676a94988f6fc7e3187383"
 
 [[projects]]
-  digest = "1:b6d886569181ec96ca83d529f4d6ba0cbf92ace7bb6f633f90c5f34d9bba7aab"
+  digest = "1:91e904d606ad35df7b5b8549d4118594bafbf492ef98b23f6ce6ed71fc64775c"
   name = "github.com/blang/semver"
   packages = ["."]
   pruneopts = "UT"
-  revision = "ba2c2ddd89069b46a7011d4106f6868f17ee1705"
-  version = "v3.6.1"
+  revision = "af3461a9cbcf1f3f5889d21b83f5ef63880c33a8"
+  version = "v4.0.0"
 
 [[projects]]
   digest = "1:ffe9824d294da03b391f44e1ae8281281b4afc1bdaa9588c9097785e3af10cec"
@@ -76,7 +76,7 @@
   version = "v0.0.1"
 
 [[projects]]
-  digest = "1:70b5ee99b21159d16aeb1d63875a419c6292a366ba77812526fe0f354a15a294"
+  digest = "1:413c5dd11bc77d4dbab4f112d2d67058f9bcaee8585c19eee0c437fe9a966c5b"
   name = "github.com/klauspost/compress"
   packages = [
     "flate",
@@ -87,24 +87,24 @@
     "zstd/internal/xxhash",
   ]
   pruneopts = "UT"
-  revision = "a41f1a10bd3b167958ff6df80b800fe2969dd3ca"
-  version = "v1.9.0"
+  revision = "a8f778f32d263b3a95d1e5a90534f5f680560abe"
+  version = "v1.10.10"
 
 [[projects]]
-  digest = "1:ce7769e1e6c4180a163da92df483369d689c8849eacfdd24a3cdcbcdc47b8b95"
+  digest = "1:3f93ad372e199afc2cf78dfc3ec97b33405678a1435bcb164b076dcc6f14855c"
   name = "github.com/klauspost/pgzip"
   packages = ["."]
   pruneopts = "UT"
-  revision = "083b1c3f84dd6486588802e5ce295de3a7f41a8b"
-  version = "v1.2.1"
+  revision = "82f3a6575571ea114ed0cdc0711a226dcce876f1"
+  version = "v1.2.4"
 
 [[projects]]
   branch = "master"
-  digest = "1:5408e061188b5b708f2e4e697c64413299c1b24de4d98abb7c428f33cfbd062e"
+  digest = "1:bf4d45346996eadab618e760a88ffcbcb1188476de883b0c98423baa44fd2382"
   name = "github.com/magiconair/properties"
   packages = ["."]
   pruneopts = "UT"
-  revision = "a586bb8b7deaae2a0eb4c6c8b63a539425628137"
+  revision = "cfba716d4c41535b46bcf2269aa5762d571d0834"
 
 [[projects]]
   branch = "master"
@@ -115,23 +115,23 @@
   revision = "233fc16b96150915426c561f677751d2c73d82b2"
 
 [[projects]]
-  digest = "1:b93a939355dc613ca1c23bf39f6d4c207da431a31dd8af001cc334ad24cab9d3"
+  digest = "1:8ff6e2d612ac4e2186fb27f0b7b8758948e3fc0b9cbd034e0ead31dbb4d01c75"
   name = "github.com/nwaples/rardecode"
   packages = ["."]
   pruneopts = "UT"
-  revision = "cc3e4b2381762c56dbcdf9f93be03349a1dc1c14"
-  version = "v1.0.0"
+  revision = "e2fa07408d4b19ae0500efbcc6983863c95f821e"
+  version = "v1.1.0"
 
 [[projects]]
-  digest = "1:cef870622e603ac1305922eb5d380455cad27e354355ae7a855d8633ffa66197"
+  digest = "1:af52537e91171a58eed809011d85641ccd78dc5c088665f30805520f8b7778ee"
   name = "github.com/pierrec/lz4"
   packages = [
     ".",
     "internal/xxh32",
   ]
   pruneopts = "UT"
-  revision = "645f9b948eee34cbcc335c70999f79c29c420fbf"
-  version = "v2.3.0"
+  revision = "65e4285c566323a894d155441e5279ec4a9884f4"
+  version = "v2.5.2"
 
 [[projects]]
   digest = "1:0028cb19b2e4c3112225cd871870f2d9cf49b9b4276531f03438a88e94be86fe"
@@ -142,18 +142,18 @@
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:99d32780e5238c2621fff621123997c3e3cca96db8be13179013aea77dfab551"
+  digest = "1:729f65378817684798e53068862397c12daffa0757abbe073f6620a560fc6fb5"
   name = "github.com/stretchr/testify"
   packages = [
     "assert",
     "require",
   ]
   pruneopts = "UT"
-  revision = "221dbe5ed46703ee255b1da0dec05086f5035f62"
-  version = "v1.4.0"
+  revision = "f654a9112bbeac49ca2cd45bfbe11533c4666cf8"
+  version = "v1.6.1"
 
 [[projects]]
-  digest = "1:2643d81498e38e44bdcf480be199cac55f29e97403b0342d962824bfe9960722"
+  digest = "1:6a1e43a1ed1cd70cb2767398c53c2a3a7e33561166fa83f9691d6ec7b6716c1e"
   name = "github.com/ulikunitz/xz"
   packages = [
     ".",
@@ -162,8 +162,8 @@
     "lzma",
   ]
   pruneopts = "UT"
-  revision = "6f934d456d51e742b4eeab20d925a827ef22320a"
-  version = "v0.5.6"
+  revision = "067145b4480ef600b25a0403f386ea25ffe42fd5"
+  version = "v0.5.7"
 
 [[projects]]
   branch = "master"
@@ -174,12 +174,12 @@
   revision = "48954b6210f8d154cb5f8484d3a3e1f83489309e"
 
 [[projects]]
-  digest = "1:59f10c1537d2199d9115d946927fe31165959a95190849c82ff11e05803528b0"
-  name = "gopkg.in/yaml.v2"
+  branch = "v3"
+  digest = "1:229cb0f6192914f518cc1241ede6d6f1f458b31debfa18bf3a5c9e4f7b01e24b"
+  name = "gopkg.in/yaml.v3"
   packages = ["."]
   pruneopts = "UT"
-  revision = "f221b8435cfb71e54062f6c6e99e9ade30b124d5"
-  version = "v2.2.4"
+  revision = "eeeca48fe7764f320e4870d231902bf9c1be2c08"
 
 [solve-meta]
   analyzer-name = "dep"
