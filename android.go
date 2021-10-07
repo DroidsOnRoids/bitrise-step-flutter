@@ -29,7 +29,7 @@ func ensureAndroidSdkSetup() error {
 		return err
 	}
 
-	sdkManagerPath := path.Join(androidHome, "tools/bin/sdkmanager")
+	sdkManagerPath := path.Join(androidHome, "cmdline-tools/cmdline-tools/bin/sdkmanager")
 
 	if !isCurrentSdkToolsUpToDate {
 		log.Infof("Current Android SDK version: %s is lower than 26. Updating...", currentSdkToolsVersion)
