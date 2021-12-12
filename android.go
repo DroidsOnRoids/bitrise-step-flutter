@@ -6,19 +6,24 @@ import (
 	"github.com/bitrise-io/go-utils/log"
 	"github.com/bitrise-io/go-utils/versions"
 	"github.com/magiconair/properties"
+	"io/fs"
 	"os"
-	"path"
+	"path/filepath"
+	"strings"
 )
 
 func ensureAndroidSdkSetup() error {
-	androidHome := os.Getenv("ANDROID_HOME")
+	androidSdkRoot := os.Getenv("ANDROID_SDK_ROOT")
+	if androidSdkRoot == "" {
+		androidSdkRoot = os.Getenv("ANDROID_HOME")
+	}
 
-	if androidHome == "" {
-		log.Infof("ANDROID_HOME environment variable not defined, skipping Android SDK setup.")
+	if androidSdkRoot == "" {
+		log.Infof("Neither ANDROID_SDK_ROOT nor ANDROID_HOME environment variable is defined, skipping Android SDK setup.")
 		return nil
 	}
 
-	sdkProperties, err := properties.LoadFile("${ANDROID_HOME}/tools/source.properties", properties.UTF8)
+	sdkProperties, err := properties.LoadFile(androidSdkRoot+"/tools/source.properties", properties.UTF8)
 	if err != nil {
 		return err
 	}
@@ -29,7 +34,10 @@ func ensureAndroidSdkSetup() error {
 		return err
 	}
 
-	sdkManagerPath := path.Join(androidHome, "cmdline-tools/cmdline-tools/bin/sdkmanager")
+	sdkManagerPath, err := findSdkManagerPath(androidSdkRoot)
+	if err != nil {
+		return err
+	}
 
 	if !isCurrentSdkToolsUpToDate {
 		log.Infof("Current Android SDK version: %s is lower than 26. Updating...", currentSdkToolsVersion)
@@ -41,4 +49,15 @@ func ensureAndroidSdkSetup() error {
 
 	licenseAcceptCommand := fmt.Sprintf("yes|%s --licenses", sdkManagerPath)
 	return command.RunBashCommand(licenseAcceptCommand)
+}
+
+func findSdkManagerPath(androidSdkRoot string) (string, error) {
+	var sdkmanagerPath string
+	var err = filepath.WalkDir(androidSdkRoot, func(path string, d fs.DirEntry, err error) error {
+		if strings.HasSuffix(path, "/sdkmanager") && strings.Contains(path, "/cmdline-tools/") && d.Type().IsRegular() {
+			sdkmanagerPath = path
+		}
+		return err
+	})
+	return sdkmanagerPath, err
 }
