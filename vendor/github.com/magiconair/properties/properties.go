@@ -8,6 +8,7 @@ package properties
 // BUG(frank): Write() does not allow to configure the newline character. Therefore, on Windows LF is used.
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"log"
@@ -115,7 +116,7 @@ func (p *Properties) Get(key string) (value string, ok bool) {
 	// circular references and malformed expressions
 	// so we panic if we still get an error here.
 	if err != nil {
-		ErrorHandler(fmt.Errorf("%s in %q", err, key+" = "+v))
+		ErrorHandler(err)
 	}
 
 	return expanded, true
@@ -636,7 +637,7 @@ func (p *Properties) WriteComment(w io.Writer, prefix string, enc Encoding) (n i
 					}
 
 					for _, c := range comments {
-						x, err = fmt.Fprintf(w, "%s%s\n", prefix, encode(c, "", enc))
+						x, err = fmt.Fprintf(w, "%s%s\n", prefix, c)
 						if err != nil {
 							return
 						}
@@ -766,7 +767,12 @@ func expand(s string, keys []string, prefix, postfix string, values map[string]s
 
 		for _, k := range keys {
 			if key == k {
-				return "", fmt.Errorf("circular reference")
+				var b bytes.Buffer
+				b.WriteString("circular reference in:\n")
+				for _, k1 := range keys {
+					fmt.Fprintf(&b, "%s=%s\n", k1, values[k1])
+				}
+				return "", fmt.Errorf(b.String())
 			}
 		}
 
@@ -780,7 +786,6 @@ func expand(s string, keys []string, prefix, postfix string, values map[string]s
 		}
 		s = s[:start] + new_val + s[end+1:]
 	}
-	return s, nil
 }
 
 // encode encodes a UTF-8 string to ISO-8859-1 and escapes some characters.
@@ -833,6 +838,8 @@ func escape(r rune, special string) string {
 		return "\\r"
 	case '\t':
 		return "\\t"
+	case '\\':
+		return "\\\\"
 	default:
 		if strings.ContainsRune(special, r) {
 			return "\\" + string(r)
