@@ -83,13 +83,7 @@ func downloadAndExtractReleaseSdk(flutterVersion, flutterSdkDestinationDir strin
 	versionComponents := strings.Split(flutterVersion, "-")
 	channel := versionComponents[len(versionComponents)-1]
 
-	flutterSdkSourceURL := fmt.Sprintf(
-		"https://storage.googleapis.com/flutter_infra_release/releases/%s/%s/flutter_%s_v%s.%s",
-		channel,
-		getFlutterPlatform(),
-		getFlutterPlatform(),
-		flutterVersion,
-		getArchiveExtension())
+	flutterSdkSourceURL := getFlutterSdkSourceURL(flutterVersion, channel)
 
 	flutterSdkParentDir := filepath.Join(flutterSdkDestinationDir, "..")
 
@@ -100,6 +94,25 @@ func downloadAndExtractReleaseSdk(flutterVersion, flutterSdkDestinationDir strin
 	} else {
 		return fmt.Errorf("unsupported OS: %s", runtime.GOOS)
 	}
+}
+
+func getFlutterSdkSourceURL(flutterVersion string, channel string) string {
+	return fmt.Sprintf(
+		"https://storage.googleapis.com/flutter_infra_release/releases/%s/%s/flutter_%s_%s%s-%s.%s",
+		channel,
+		getFlutterPlatform(),
+		getFlutterPlatform(),
+		getArchitecture(),
+		flutterVersion,
+		channel,
+		getArchiveExtension())
+}
+
+func getArchitecture() string {
+	if runtime.GOARCH == "arm64" {
+		return "arm64_"
+	}
+	return ""
 }
 
 func downloadAndExtractSnapshotSdk(flutterVersion, flutterSdkDestinationDir string) error {

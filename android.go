@@ -48,7 +48,13 @@ func ensureAndroidSdkSetup() error {
 	}
 
 	licenseAcceptCommand := fmt.Sprintf("yes|%s --licenses", sdkManagerPath)
-	return command.RunBashCommand(licenseAcceptCommand)
+	err = command.RunBashCommand(licenseAcceptCommand)
+	if err != nil {
+		return err
+	}
+
+	cmdlineToolsInstallCommand := fmt.Sprintf("yes|%s \"cmdline-tools;7.0\"", sdkManagerPath)
+	return command.RunBashCommand(cmdlineToolsInstallCommand)
 }
 
 func findSdkManagerPath(androidSdkRoot string) (string, error) {
