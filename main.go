@@ -99,6 +99,7 @@ func downloadAndExtractReleaseSdk(flutterVersion, flutterSdkDestinationDir strin
 }
 
 func getFlutterSdkSourceURL(flutterVersion string, channel string) string {
+	log.Infof("ver %s chn %s", flutterVersion, channel)
 	return fmt.Sprintf(
 		"https://storage.googleapis.com/flutter_infra_release/releases/%s/%s/flutter_%s_%s%s-%s.%s",
 		channel,
