@@ -48,6 +48,7 @@ func main() {
 		log.Infof("Extracting Flutter SDK to %s", flutterSdkDir)
 
 		if err := downloadAndExtractReleaseSdk(config.Version, flutterSdkDir); err != nil {
+			log.Warnf("error %s", err)
 			log.Infof("Version %s not found in releases, trying snapshot.", config.Version)
 
 			if err := downloadAndExtractSnapshotSdk(config.Version, flutterSdkDir); err != nil {
@@ -84,6 +85,7 @@ func downloadAndExtractReleaseSdk(flutterVersion, flutterSdkDestinationDir strin
 	channel := versionComponents[len(versionComponents)-1]
 
 	flutterSdkSourceURL := getFlutterSdkSourceURL(flutterVersion, channel)
+	log.Warnf("Downloading %s", flutterSdkSourceURL)
 
 	flutterSdkParentDir := filepath.Join(flutterSdkDestinationDir, "..")
 
