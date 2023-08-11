@@ -31,7 +31,7 @@
 [[projects]]
   branch = "master"
   digest = "1:caf5b6526ab478df1debb4048cc99489d3954975457c4ba63441f489c9053ea2"
-  name = "github.com/bitrise-tools/go-steputils"
+  name = "github.com/bitrise-io/go-steputils"
   packages = ["stepconf"]
   pruneopts = "UT"
   revision = "94490ca44ddb645764676a94988f6fc7e3187383"
@@ -191,7 +191,7 @@
     "github.com/bitrise-io/go-utils/log",
     "github.com/bitrise-io/go-utils/pathutil",
     "github.com/bitrise-io/go-utils/versions",
-    "github.com/bitrise-tools/go-steputils/stepconf",
+    "github.com/bitrise-io/go-steputils/stepconf",
     "github.com/blang/semver",
     "github.com/magiconair/properties",
     "github.com/mholt/archiver",
