@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
+	"github.com/bitrise-io/go-steputils/stepconf"
 	"github.com/bitrise-io/go-utils/command"
 	"github.com/bitrise-io/go-utils/command/git"
 	"github.com/bitrise-io/go-utils/fileutil"
 	"github.com/bitrise-io/go-utils/log"
 	"github.com/bitrise-io/go-utils/pathutil"
-	"github.com/bitrise-tools/go-steputils/stepconf"
 	"os"
 	"path/filepath"
 	"runtime"
