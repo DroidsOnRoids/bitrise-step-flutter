@@ -27,11 +27,6 @@ func main() {
 		os.Exit(6)
 	}
 
-	if err := ensureMacOSSetup(); err != nil {
-		log.Errorf("Could not setup macOS environment, error: %s", err)
-		os.Exit(6)
-	}
-
 	flutterSdkDir, err := getSdkDestinationDir()
 	if err != nil {
 		log.Errorf("Could not calculate Flutter SDK destination directory path, error: %s", err)
