@@ -11,7 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
-	"strings"
+	"net/http"
 )
 
 func main() {
@@ -75,10 +75,7 @@ func main() {
 }
 
 func downloadAndExtractReleaseSdk(flutterVersion, flutterSdkDestinationDir string) error {
-	versionComponents := strings.Split(flutterVersion, "-")
-	channel := versionComponents[len(versionComponents)-1]
-
-	flutterSdkSourceURL := getFlutterSdkSourceURL(flutterVersion, channel)
+	flutterSdkSourceURL := getFlutterSdkWithChannelSourceURL(flutterVersion)
 
 	flutterSdkParentDir := filepath.Join(flutterSdkDestinationDir, "..")
 
@@ -89,6 +86,23 @@ func downloadAndExtractReleaseSdk(flutterVersion, flutterSdkDestinationDir strin
 	} else {
 		return fmt.Errorf("unsupported OS: %s", runtime.GOOS)
 	}
+}
+
+func getFlutterSdkWithChannelSourceURL(flutterVersion string) string {
+    channels := [2]string{"stable", "beta"}
+    var url string
+    for _, channel := range channels {
+        url = getFlutterSdkSourceURL(flutterVersion, channel)
+        if sdkFileExists(url) {
+            break
+        }
+    }
+    return url
+}
+
+func sdkFileExists(url string) bool {
+    response, err := http.Head(url)
+    return err == nil && response.StatusCode == 200
 }
 
 func getFlutterSdkSourceURL(flutterVersion string, channel string) string {
