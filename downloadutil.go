@@ -6,13 +6,12 @@ import (
 	"github.com/blang/semver"
 	"github.com/mholt/archiver"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"os"
 )
 
 func downloadAndUnTarXZ(url, dirPath string) error {
-	file, err := ioutil.TempFile("", "flutter.*.tar.xz")
+	file, err := os.CreateTemp("", "flutter.*.tar.xz")
 	if err != nil {
 		return err
 	}

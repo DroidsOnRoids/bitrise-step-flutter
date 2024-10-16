@@ -4,7 +4,6 @@ import (
 	"github.com/bitrise-io/go-utils/pathutil"
 	"github.com/mholt/archiver"
 	"github.com/stretchr/testify/require"
-	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -32,7 +31,7 @@ func TestDownloadFileHTTPError(t *testing.T) {
 }
 
 func TestDownloadFileSuccessfully(t *testing.T) {
-	dummyFile, err := ioutil.TempFile("", "test.txt")
+	dummyFile, err := os.CreateTemp("", "test.txt")
 	require.NoError(t, err)
 
 	ts := httptest.NewServer(http.FileServer(http.Dir(os.TempDir())))
@@ -49,10 +48,10 @@ func TestDownloadFileSuccessfully(t *testing.T) {
 }
 
 func TestDownloadAnUnTarXZSuccessfully(t *testing.T) {
-	archiveDir, err := ioutil.TempDir("", "testdir")
+	archiveDir, err := os.MkdirTemp("", "testdir")
 	require.NoError(t, err)
 
-	dummyFile, err := ioutil.TempFile("", "test")
+	dummyFile, err := os.CreateTemp("", "test")
 	require.NoError(t, err)
 
 	const archiveFileName = "test.tar.xz"
@@ -64,7 +63,7 @@ func TestDownloadAnUnTarXZSuccessfully(t *testing.T) {
 	ts := httptest.NewServer(http.FileServer(http.Dir(archiveDir)))
 	defer ts.Close()
 
-	destinationDir, err := ioutil.TempDir("", "destination")
+	destinationDir, err := os.MkdirTemp("", "destination")
 	require.NoError(t, err)
 
 	err = downloadAndUnTarXZ(ts.URL+"/"+archiveFileName, destinationDir)
