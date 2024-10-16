@@ -63,10 +63,29 @@ workflows:
     - test-ecf577ce5a7d8f3df1e320bc160d9f3eaf4a2e07
     - test-multiple-versions
     steps:
+    - git-clone@8: {}
+    - script:
+        title: Setup environment
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+
+            rm -rf /opt/flutter/
+            go install github.com/kisielk/errcheck@latest
     - go-list: {}
-    - errcheck: {}
+    - script:
+        title: Static code analysis
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+
+            errcheck ./...
+            go vet
     - go-test: {}
-    - golint: {}
     - script:
         title: Setup tests
         inputs:
@@ -95,12 +114,15 @@ workflows:
             #!/usr/bin/env bash
             set -e
             git clone https://github.com/DroidsOnRoidsPlayground/flutter-app-example.git
-    - path::./:
-        title: Step Test
+    - script:
+        title: Step test
         inputs:
-        - version: 3.24.3
-        - working_dir: flutter-app-example
-        - commands: $FLUTTER_COMMANDS
+          - content: |-
+              #!/usr/bin/env bash
+              set -e
+              cp ../bitrise.yml ../step.yml ../*.go ../go.mod .
+              go get
+              GOFLAGS=-buildvcs=false bitrise run step-test-3243
   test-master:
     steps:
     - change-workdir:
@@ -115,12 +137,16 @@ workflows:
             #!/usr/bin/env bash
             set -e
             git clone https://github.com/DroidsOnRoidsPlayground/flutter-app-example.git
-    - path::./:
-        title: Step Test
+    - script:
+        title: Step test
         inputs:
-        - version: master
-        - working_dir: flutter-app-example
-        - commands: $FLUTTER_COMMANDS
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            echo $BITRISE_SOURCE_DIR
+            cp ../bitrise.yml ../step.yml ../*.go ../go.mod .
+            go get
+            GOFLAGS=-buildvcs=false bitrise run step-test-master
   test-multiple-versions:
     steps:
     - change-workdir:
@@ -135,15 +161,37 @@ workflows:
             #!/usr/bin/env bash
             set -e
             git clone https://github.com/DroidsOnRoidsPlayground/flutter-app-example.git
-    - path::./:
-        title: Step Test
+    - script:
+        title: Step test
         inputs:
-        - version: ecf577ce5a7d8f3df1e320bc160d9f3eaf4a2e07
-        - working_dir: flutter-app-example
-        - commands: $FLUTTER_COMMANDS
-    - path::./:
-        title: Step Test
-        inputs:
-        - version: master
-        - working_dir: flutter-app-example
-        - commands: $FLUTTER_COMMANDS
+          - content: |-
+              #!/usr/bin/env bash
+              set -e
+              cp ../bitrise.yml ../step.yml ../*.go ../go.mod .
+              go get
+              GOFLAGS=-buildvcs=false bitrise run step-test-ecf577ce5a7d8f3df1e320bc160d9f3eaf4a2e07
+              GOFLAGS=-buildvcs=false bitrise run step-test-master
+  step-test-master:
+    steps:
+      - path::./:
+          title: Step Test
+          inputs:
+            - version: master
+            - working_dir: flutter-app-example
+            - commands: $FLUTTER_COMMANDS
+  step-test-ecf577ce5a7d8f3df1e320bc160d9f3eaf4a2e07:
+    steps:
+      - path::./:
+          title: Step Test
+          inputs:
+          - version: ecf577ce5a7d8f3df1e320bc160d9f3eaf4a2e07
+          - working_dir: flutter-app-example
+          - commands: $FLUTTER_COMMANDS
+  step-test-3243:
+    steps:
+      - path::./:
+          title: Step Test
+          inputs:
+          - version: 3.24.3
+          - working_dir: flutter-app-example
+          - commands: $FLUTTER_COMMANDS

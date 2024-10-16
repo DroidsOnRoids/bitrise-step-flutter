@@ -54,7 +54,7 @@ deps:
   - name: git
   - name: curl
   - name: unzip
-  - name: python
+
   apt_get:
   - name: git
   - name: curl
@@ -64,7 +64,6 @@ deps:
 toolkit:
   go:
     package_name: github.com/DroidsOnRoids/bitrise-step-flutter
-
 
 inputs:
   - version: 1.17.4
