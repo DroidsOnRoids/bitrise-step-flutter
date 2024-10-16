@@ -73,7 +73,7 @@ workflows:
                 set -e
 
                 if [[ "$OSTYPE" == darwin* ]]; then
-                  FLUTTER_COMMANDS="$FLUTTER_COMMANDS|build ios --simulator"
+                  FLUTTER_COMMANDS="$FLUTTER_COMMANDS|build macos"
                 else
                   FLUTTER_COMMANDS="$FLUTTER_COMMANDS|build apk"
                 fi
@@ -95,7 +95,7 @@ workflows:
       - path::./:
           title: Step Test
           inputs:
-            - version: ecf577ce5a7d8f3df1e320bc160d9f3eaf4a2e07
+            - version: 3.24.3
             - working_dir: flutter-app-example
             - commands: $FLUTTER_COMMANDS
   test-master:
