@@ -43,9 +43,6 @@ type_tags:
 
 project_type_tags:
   - flutter
-deps:
-  brew:
-  - name: python
 
 is_requires_admin_user: false
 is_always_run: false
@@ -57,6 +54,7 @@ deps:
   - name: git
   - name: curl
   - name: unzip
+  - name: python
   apt_get:
   - name: git
   - name: curl
