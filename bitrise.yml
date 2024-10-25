@@ -3,8 +3,8 @@ default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: ""
 meta:
   bitrise.io:
-    stack: osx-xcode-edge
-    machine_type_id: g2-m1.4core
+    stack: linux-docker-android-22.04
+    machine_type_id: elite
 app:
   envs:
   - FLUTTER_COMMANDS: doctor --android-licenses|config --no-analytics|test
