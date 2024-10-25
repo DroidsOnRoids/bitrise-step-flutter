@@ -8,10 +8,10 @@ import (
 	"github.com/bitrise-io/go-utils/fileutil"
 	"github.com/bitrise-io/go-utils/log"
 	"github.com/bitrise-io/go-utils/pathutil"
+	"net/http"
 	"os"
 	"path/filepath"
 	"runtime"
-	"net/http"
 )
 
 func main() {
@@ -89,20 +89,20 @@ func downloadAndExtractReleaseSdk(flutterVersion, flutterSdkDestinationDir strin
 }
 
 func getFlutterSdkWithChannelSourceURL(flutterVersion string) string {
-    channels := [2]string{"stable", "beta"}
-    var url string
-    for _, channel := range channels {
-        url = getFlutterSdkSourceURL(flutterVersion, channel)
-        if sdkFileExists(url) {
-            break
-        }
-    }
-    return url
+	channels := [2]string{"stable", "beta"}
+	var url string
+	for _, channel := range channels {
+		url = getFlutterSdkSourceURL(flutterVersion, channel)
+		if sdkFileExists(url) {
+			break
+		}
+	}
+	return url
 }
 
 func sdkFileExists(url string) bool {
-    response, err := http.Head(url)
-    return err == nil && response.StatusCode == 200
+	response, err := http.Head(url)
+	return err == nil && response.StatusCode == 200
 }
 
 func getFlutterSdkSourceURL(flutterVersion string, channel string) string {

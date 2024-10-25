@@ -5,10 +5,11 @@ import (
 	"github.com/bitrise-io/go-utils/command"
 	"github.com/bitrise-io/go-utils/log"
 	"github.com/bitrise-io/go-utils/versions"
-	"github.com/magiconair/properties"
 	"io/fs"
 	"os"
 	"path/filepath"
+	"regexp"
+	"slices"
 	"strings"
 )
 
@@ -23,24 +24,12 @@ func ensureAndroidSdkSetup() error {
 		return nil
 	}
 
-	sdkProperties, err := properties.LoadFile(androidSdkRoot+"/tools/source.properties", properties.UTF8)
-	if err != nil {
-		return err
-	}
-
-	currentSdkToolsVersion := sdkProperties.GetString("Pkg.Revision", "0.0.0")
-	isCurrentSdkToolsUpToDate, err := versions.IsVersionGreaterOrEqual(currentSdkToolsVersion, "26.0.0")
-	if err != nil {
-		return err
-	}
-
 	sdkManagerPath, err := findSdkManagerPath(androidSdkRoot)
 	if err != nil {
 		return err
 	}
 
-	if !isCurrentSdkToolsUpToDate {
-		log.Infof("Current Android SDK version: %s is lower than 26. Updating...", currentSdkToolsVersion)
+	if !isAndroidBuildToolsUpToDate(androidSdkRoot) {
 		updateCommand := fmt.Sprintf("yes|%s --update", sdkManagerPath)
 		if err := command.RunBashCommand(updateCommand); err != nil {
 			return err
@@ -66,4 +55,67 @@ func findSdkManagerPath(androidSdkRoot string) (string, error) {
 		return err
 	})
 	return sdkmanagerPath, err
+}
+
+func findBuildToolsVersion(root string) (string, error) {
+	var matches []string
+	versionRegex := regexp.MustCompile(`build-tools/(\d+\.\d+\.\d+)/source.properties`)
+
+	err := filepath.Walk(root, func(path string, info fs.FileInfo, err error) error {
+		if err != nil {
+			log.Warnf("failed to access path %s, skipping, error: %s", path, err)
+			return filepath.SkipDir
+		}
+		if versionRegex.MatchString(path) {
+			matches = append(matches, path)
+		}
+		return nil
+	})
+
+	if err != nil {
+		return "", err
+	}
+
+	if len(matches) == 0 {
+		return "", fmt.Errorf("no source.properties file found")
+	}
+
+	slices.SortFunc(matches, func(a, b string) int {
+		versionA := versionRegex.FindStringSubmatch(a)[1]
+		versionB := versionRegex.FindStringSubmatch(b)[1]
+		compareVersions, err2 := versions.CompareVersions(versionA, versionB)
+		if err2 != nil {
+			log.Warnf(
+				"Failed to compare versions %s and %s, assuming they are equal. Error: %s",
+				versionA,
+				versionB,
+				err2,
+			)
+			return 0
+		}
+		return compareVersions
+	})
+
+	return versionRegex.FindStringSubmatch(matches[0])[1], nil
+}
+
+func isAndroidBuildToolsUpToDate(androidSdkRoot string) bool {
+	currentBuildToolsVersion, err := findBuildToolsVersion(androidSdkRoot)
+	if err != nil {
+		log.Warnf("Failed to determine current Android Build Tools version, assuming it is outdated. Error: %s", err)
+		return false
+	}
+	isCurrentBuildToolsUpToDate, err := versions.IsVersionGreaterOrEqual(currentBuildToolsVersion, "26.0.0")
+	if err != nil {
+		log.Warnf(
+			"Failed to compare current Android Build Tools version %s with reference, assuming it is outdated. Error: %s",
+			currentBuildToolsVersion,
+			err,
+		)
+		return false
+	}
+	if !isCurrentBuildToolsUpToDate {
+		log.Infof("Current Android Build Tools version %s is lower than 26.0.0, updating...", currentBuildToolsVersion)
+	}
+	return isCurrentBuildToolsUpToDate
 }
